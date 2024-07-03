@@ -1,0 +1,64 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+}
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100%;
+  position: relative;
+  font-size: 16px;
+  overflow-y: scroll;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+
+  @mixin light {
+    background-color: #e8e8e8;
+
+    color: #000;
+  }
+
+  @mixin dark {
+    background-color: #1a1b1e;
+    color: #c1c2c5;
+  }
+}
+
+#root {
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  background-color: transparent;
+  outline: 0;
+  color: var(--mantine-color-text);
+}
+
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  text-decoration: none;
+  outline: none;
+  color: var(--mantine-color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}

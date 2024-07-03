@@ -1,0 +1,46 @@
+# .NET build artifacts
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+# Sqlite database files
+db/
+# Serilog files
+logs/
+
+# NuGet packages
+*.nuget.props
+*.nuget.targets
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+AnyCPU/
+*.exe
+*.pdb
+*.dll
+*.manifest
+*.cache
+*.log
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Resharper
+_ReSharper*/
+*.resharper*
+
+# Vite build
+**/wwwroot/**/assets/

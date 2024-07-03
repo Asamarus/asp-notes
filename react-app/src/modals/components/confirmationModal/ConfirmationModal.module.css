@@ -1,0 +1,4 @@
+.content {
+  background-color: var(--mantine-color-body);
+  padding: rem(20px);
+}

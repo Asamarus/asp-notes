@@ -1,0 +1,16 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "declaration-empty-line-before": null,
+    "rule-empty-line-before": null,
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreProperties": ["text-rendering"]
+      }
+    ],
+    "selector-class-pattern": null
+  }
+}
