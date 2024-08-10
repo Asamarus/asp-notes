@@ -13,4 +13,17 @@ public class NoteSource
     public string? Image { get; set; }
 
     public bool ShowImage { get; set; } = false;
+
+    public NoteSource() { }
+
+    public NoteSource(NoteSource source)
+    {
+        Id = source.Id;
+        Link = source.Link;
+        Title = source.Title;
+        Description = source.Description;
+        Image = source.Image;
+        ShowImage = source.ShowImage;
+    }
 }
+

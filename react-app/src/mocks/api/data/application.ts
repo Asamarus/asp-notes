@@ -1,6 +1,9 @@
 import { components } from '@/misc/openapi'
 
 export const getInitialDataResponseMock: components['schemas']['InitialDataResponse'] = {
-  title: 'Project template title',
-  someData: 'Some data',
+  allNotesSection: {
+    name: 'all',
+    displayName: 'Notes',
+    color: '#1e88e5',
+  },
 }

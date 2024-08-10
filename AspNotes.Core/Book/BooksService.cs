@@ -10,7 +10,7 @@ namespace AspNotes.Core.Book;
 /// <summary>
 /// Provides services for managing books and their associations with notes.
 /// </summary>
-public class BooksService(NotesDbContext context, QueryFactory db, ILogger<BooksService> logger) : IBookService
+public class BooksService(NotesDbContext context, QueryFactory db, ILogger<BooksService> logger) : IBooksService
 {
     /// <summary>
     /// Updates the book associated with a given note within a transaction. If an exception occurs, the transaction is rolled back.
@@ -123,7 +123,7 @@ public class BooksService(NotesDbContext context, QueryFactory db, ILogger<Books
 
         var query = db.Query()
             .Select(b.Id, b.Name)
-            .SelectRaw($"Count({n.Id}) as Number")
+            .SelectRaw($"Count({n.Id}) as Count")
             .From(b.GetFormattedTableName())
             .LeftJoin(n.GetFormattedTableName(), b.Name, n.Book)
             .GroupByRaw($"{b.Name}, {b.Id}");
@@ -140,7 +140,7 @@ public class BooksService(NotesDbContext context, QueryFactory db, ILogger<Books
         {
             Id = book.Id,
             Name = book.Name,
-            Number = book.Number
+            Count = book.Count
         }).OrderBy(book => book.Name, StringComparer.OrdinalIgnoreCase)];
     }
 }

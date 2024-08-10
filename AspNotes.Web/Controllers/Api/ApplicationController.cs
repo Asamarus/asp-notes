@@ -1,14 +1,16 @@
 ﻿using Ardalis.GuardClauses;
 using AspNotes.Web.Helpers;
+using AspNotes.Web.Models;
 using AspNotes.Web.Models.Application;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AspNotes.Web.Controllers.Api;
 
 [Route("api/application")]
 [ApiController]
 [Produces("application/json")]
-public class ApplicationController : ControllerBase
+public class ApplicationController(IOptions<AllNotesSection> allNotesSection) : ControllerBase
 {
     /// <summary>
     /// Retrieves the initial data for the application
@@ -24,8 +26,7 @@ public class ApplicationController : ControllerBase
 
         return Ok(new InitialDataResponse
         {
-            Title = "Project template title",
-            SomeData = "Some data"
+            AllNotesSection = allNotesSection.Value
         });
     }
 }

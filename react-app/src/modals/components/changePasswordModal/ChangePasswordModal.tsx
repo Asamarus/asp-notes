@@ -1,8 +1,8 @@
-import { AccountsContext } from '@/providers/accountsProvider'
-import { PasswordInput, Fieldset, Group, Button } from '@mantine/core'
 import { useForm } from 'react-hook-form'
-import type { SubmitHandler } from 'react-hook-form'
-import { useContext } from 'react'
+import { accountsActions } from '@/actions'
+import { useAccountsStore } from '@/store'
+
+import { PasswordInput, Fieldset, Group, Button } from '@mantine/core'
 import { TbLock } from 'react-icons/tb'
 
 type Inputs = {
@@ -15,7 +15,7 @@ const minPasswordLengthValidation = (value: string) =>
   value.length >= 6 || 'Minimum password length is 6'
 
 function ChangePasswordModal() {
-  const { changePassword, isChangePasswordLoading } = useContext(AccountsContext)
+  const { isChangePasswordLoading } = useAccountsStore((state) => state)
   const {
     register,
     handleSubmit,
@@ -28,12 +28,13 @@ function ChangePasswordModal() {
       passwordRepeat: '',
     },
   })
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    changePassword(data.currentPassword, data.newPassword, data.passwordRepeat)
-  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit((data) => {
+        accountsActions.changePassword(data.currentPassword, data.newPassword, data.passwordRepeat)
+      })}
+    >
       <Fieldset
         disabled={isChangePasswordLoading}
         variant="unstyled"

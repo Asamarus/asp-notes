@@ -33,38 +33,13 @@ public class NotesDbContext(DbContextOptions<NotesDbContext> options) : DbContex
     public override int SaveChanges()
     {
         UpdateTimestamps();
-        UpdateNotesSearchIndex();
         return base.SaveChanges();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateTimestamps();
-        UpdateNotesSearchIndex();
-
         return base.SaveChangesAsync(cancellationToken);
-    }
-
-    private void UpdateNotesSearchIndex()
-    {
-        var notes = ChangeTracker.Entries<NoteEntity>()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-
-        foreach (var note in notes)
-        {
-            if (note.Property(e => e.Title).IsModified || note.State == EntityState.Added)
-            {
-                var title = note.Entity.Title;
-                note.Entity.TitleSearchIndex = string.IsNullOrEmpty(title) ? null : SearchHelper.GetSearchIndex(title);
-            }
-
-            if (note.Property(e => e.Content).IsModified || note.State == EntityState.Added)
-            {
-                var content = note.Entity.Content;
-                note.Entity.ContentSearchIndex = string.IsNullOrEmpty(content) ? null : SearchHelper.GetSearchIndex(content);
-                note.Entity.Preview = string.IsNullOrEmpty(content) ? null : SearchHelper.GetSearchIndex(content, false, 100);
-            }
-        }
     }
 
     private void UpdateTimestamps()

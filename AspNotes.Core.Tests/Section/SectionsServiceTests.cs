@@ -32,12 +32,7 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task IsSectionNameUnique_ShouldReturnFalse_WhenNameExists()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Act
         var result = await _sectionsService.IsSectionNameUnique("Test");
@@ -50,12 +45,7 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task IsSectionNameUnique_ShouldReturnTrue_WhenNameDoesNotExist()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Act
         var result = await _sectionsService.IsSectionNameUnique("NonExistent");
@@ -80,12 +70,7 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task IsSectionIdPresent_ShouldReturnTrue_WhenIdExists()
     {
         // Arrange
-        var sectionId = await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
+        var sectionId = await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Act
         var result = await _sectionsService.IsSectionIdPresent(sectionId);
@@ -110,12 +95,7 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task IsSectionNameValid_ShouldReturnTrue_WhenNameIsValid()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Act
         var result = await _sectionsService.IsSectionNameValid("Test");
@@ -128,12 +108,7 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task IsSectionHavingNotes_ShouldReturnTrue_WhenSectionIsHavingNotes()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         DbFixture.DbContext.Notes.Add(new NoteEntity
         {
@@ -181,24 +156,9 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task GetSections_ShouldReturnNotEmptyList_WhenSectionsExist()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 1",
-            DisplayName = "Test 1",
-            Color = "#000000",
-        });
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 2",
-            DisplayName = "Test 2",
-            Color = "#000000",
-        });
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 3",
-            DisplayName = "Test 3",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test 1", "Test 1", "#000000");
+        await _sectionsService.CreateSection("Test 2", "Test 2", "#000000");
+        await _sectionsService.CreateSection("Test 3", "Test 3", "#000000");
 
         // Act
         var result = await _sectionsService.GetSections();
@@ -219,15 +179,9 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task CreateSection_ShouldCreateNewSection_WhenSectionDoesNotExist()
     {
         // Arrange
-        var section = new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        };
 
         // Act
-        var result = await _sectionsService.CreateSection(section);
+        var result = await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Assert
         Assert.True(result > 0);
@@ -237,29 +191,16 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task UpdateSection_ShouldUpdateExistingSection_WhenSectionExists()
     {
         // Arrange
-        var sectionId = await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test",
-            DisplayName = "Test",
-            Color = "#000000",
-        });
-        var sectionUpdate = new SectionDto
-        {
-            Id = 1,
-            Name = "UpdatedTest",
-            DisplayName = "UpdatedTest",
-            Color = "#FFFFFF",
-        };
+        var sectionId = await _sectionsService.CreateSection("Test", "Test", "#000000");
 
         // Act
-        var updated = await _sectionsService.UpdateSection(sectionUpdate);
+        var updated = await _sectionsService.UpdateSection(1, "UpdatedTest", "#FFFFFF");
 
         // Assert
         Assert.True(updated);
 
         var section = await DbFixture.DbContext.Sections.FindAsync(sectionId);
         Assert.NotNull(section);
-        Assert.Equal("UpdatedTest", section.Name);
         Assert.Equal("UpdatedTest", section.DisplayName);
         Assert.Equal("#FFFFFF", section.Color);
     }
@@ -268,26 +209,11 @@ public class SectionsServiceTests : DatabaseTestBase
     public async Task DeleteSection_ShouldDeleteExistingSection_WhenSectionExists()
     {
         // Arrange
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 1",
-            DisplayName = "Test 1",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test 1", "Test 1", "#000000");
 
-        var sectionId = await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 2",
-            DisplayName = "Test 2",
-            Color = "#000000",
-        });
+        var sectionId = await _sectionsService.CreateSection("Test 2", "Test 2", "#000000");
 
-        await _sectionsService.CreateSection(new SectionDto
-        {
-            Name = "Test 3",
-            DisplayName = "Test 3",
-            Color = "#000000",
-        });
+        await _sectionsService.CreateSection("Test 3", "Test 3", "#000000");
 
         // Act
         var deleted = await _sectionsService.DeleteSection(sectionId);
@@ -335,14 +261,13 @@ public class SectionsServiceTests : DatabaseTestBase
         var sectionIds = new List<long>();
         foreach (var section in sections)
         {
-            sectionIds.Add(await _sectionsService.CreateSection(section));
+            sectionIds.Add(await _sectionsService.CreateSection(section.Name, section.DisplayName, section.Color));
         }
 
-        var reversedSectionIds = sectionIds;
-        reversedSectionIds.Reverse();
+        sectionIds.Reverse();
 
         // Act
-        var result = await _sectionsService.ReorderSections(reversedSectionIds);
+        var result = await _sectionsService.ReorderSections(sectionIds);
 
         // Assert
         Assert.True(result);

@@ -18,6 +18,6 @@ public class HomeControllerTests
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal("Project template title", viewResult.ViewData["Title"]);
+        Assert.Equal("Notes", viewResult.ViewData["Title"]);
     }
 }

@@ -74,11 +74,17 @@ public class SectionsService(NotesDbContext context, AppCache appCache) : ISecti
     }
 
     /// <summary>
-    /// Creates a new section in the database.
+    /// Creates a new section with the specified details and adds it to the database.
     /// </summary>
-    /// <param name="section">The section to create.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the ID of the created section.</returns>
-    public async Task<long> CreateSection(SectionDto section)
+    /// <param name="name">The unique name of the section.</param>
+    /// <param name="displayName">The display name of the section.</param>
+    /// <param name="color">The color associated with the section.</param>
+    /// <returns>The ID of the newly created section.</returns>
+    /// <remarks>
+    /// This method automatically assigns the next available position to the new section.
+    /// It also updates the sections cache after adding the new section.
+    /// </remarks>
+    public async Task<long> CreateSection(string name, string displayName, string color)
     {
         var maxPosition = context.Sections.Any()
             ? await context.Sections.MaxAsync(x => x.Position)
@@ -86,9 +92,9 @@ public class SectionsService(NotesDbContext context, AppCache appCache) : ISecti
 
         var entity = new SectionEntity
         {
-            Name = section.Name,
-            DisplayName = section.DisplayName,
-            Color = section.Color,
+            Name = name,
+            DisplayName = displayName,
+            Color = color,
             Position = maxPosition + 1
         };
 
@@ -102,16 +108,23 @@ public class SectionsService(NotesDbContext context, AppCache appCache) : ISecti
     }
 
     /// <summary>
-    /// Updates a section in the database.
+    /// Updates the details of an existing section.
     /// </summary>
-    /// <param name="section">The section to update.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value that indicates whether the operation was successful.</returns>
-    public async Task<bool> UpdateSection(SectionDto section)
+    /// <param name="id">The ID of the section to update.</param>
+    /// <param name="displayName">The new display name for the section.</param>
+    /// <param name="color">The new color for the section.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation, with a value of true if the update was successful.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the specified section cannot be found.</exception>
+    /// <remarks>
+    /// This method updates the display name and color of the specified section.
+    /// It also clears and updates the sections cache after the update.
+    /// </remarks>
+    public async Task<bool> UpdateSection(long id, string displayName, string color)
     {
-        var entity = await context.Sections.FindAsync(section.Id) ?? throw new InvalidOperationException("Section not found.");
-        entity.Name = section.Name;
-        entity.DisplayName = section.DisplayName;
-        entity.Color = section.Color;
+        var entity = await context.Sections.FindAsync(id) ?? throw new InvalidOperationException("Section not found.");
+
+        entity.DisplayName = displayName;
+        entity.Color = color;
 
         await context.SaveChangesAsync();
 

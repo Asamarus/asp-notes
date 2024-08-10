@@ -3,7 +3,13 @@ using AspNotes.Core.Common.Models;
 
 namespace AspNotes.Web.Helpers;
 
-public class UrlMetadataHelper(IHttpClientFactory clientFactory)
+
+public interface IUrlMetadataHelper
+{
+    Task<HtmlDocumentMetadata> GetUrlMetadata(string url);
+}
+
+public class UrlMetadataHelper(IHttpClientFactory clientFactory) : IUrlMetadataHelper
 {
     public async Task<HtmlDocumentMetadata> GetUrlMetadata(string url)
     {

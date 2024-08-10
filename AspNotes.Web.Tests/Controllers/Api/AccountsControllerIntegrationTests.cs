@@ -2,6 +2,8 @@
 using AspNotes.Web.Models.Accounts;
 using AspNotes.Web.Models.Common;
 using AspNotes.Web.Tests.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -99,7 +101,7 @@ public class AccountsControllerIntegrationTests(CustomWebApplicationFactory<Star
     [Fact]
     public async Task Login_ReturnsOk_WhenValidCredentialsAndNoToken()
     {
-        // Arrange        
+        // Arrange
         var jwtSettings = TestHelper.GetJwtSettings();
         (var userEmail, var userPassword) = TestHelper.GetDefaultUserCredentials();
         var client = factory.CreateClient();
@@ -136,13 +138,16 @@ public class AccountsControllerIntegrationTests(CustomWebApplicationFactory<Star
     }
 
     [Fact]
-    public async Task Login_ReturnsNullToken_WhenValidCredentialsAndProductionEnvironment()
+    public async Task Login_ReturnsNullToken_WhenValidCredentialsAndNotDevelopmentEnvironment()
     {
         // Arrange
         var jwtSettings = TestHelper.GetJwtSettings();
         (var userEmail, var userPassword) = TestHelper.GetDefaultUserCredentials();
-        using var factory = new ProductionWebApplicationFactory<Startup>();
-        var client = factory.CreateClient();
+        var client = factory.WithWebHostBuilder(builder =>
+        {
+            builder.UseEnvironment(Environments.Staging);
+
+        }).CreateClient();
 
         var loginRequest = new LoginRequest { Email = userEmail, Password = userPassword };
         var content = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8, "application/json");

@@ -15,6 +15,6 @@ public class HomeControllerIntegrationTests(CustomWebApplicationFactory<Startup>
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
-        Assert.Contains("<title>Project template title</title>", responseString);
+        Assert.Contains("<title>Notes</title>", responseString);
     }
 }

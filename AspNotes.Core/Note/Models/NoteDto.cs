@@ -22,10 +22,8 @@ public class NoteDto
 
     public List<NoteSource> Sources { get; set; } = [];
 
-    // Optional constructor
     public NoteDto() { }
 
-    // Constructor that initializes properties with values from NoteEntity
     public NoteDto(NoteEntity note)
     {
         Id = note.Id;
@@ -36,7 +34,7 @@ public class NoteDto
         Content = note.Content;
         Preview = note.Preview;
         Book = note.Book;
-        Tags = note.Tags;
-        Sources = note.Sources;
+        Tags = new List<string>(note.Tags);
+        Sources = note.Sources.Select(source => new NoteSource(source)).ToList();
     }
 }

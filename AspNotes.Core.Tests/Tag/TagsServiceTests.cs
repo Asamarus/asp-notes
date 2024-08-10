@@ -25,12 +25,16 @@ public class TagsServiceTests : DatabaseTestBase
     public async Task UpdateNoteTags_AddsNewTags_WhenTagsAreNew()
     {
         // Arrange
-        var note = await _notesService.CreateNote(new NoteDto
+        var note = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = "section1"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note);
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var newTags = new HashSet<string> { "Tag1", "Tag2" };
 
         // Act
@@ -57,12 +61,17 @@ public class TagsServiceTests : DatabaseTestBase
     public async Task UpdateNoteTags_RemovesTags_WhenProvidedEmptyHashSetForExistingNote()
     {
         // Arrange
-        var existingNote = await _notesService.CreateNote(new NoteDto
+        var existingNote = new NoteEntity
         {
             Title = "Existing Note",
             Content = "Existing content",
             Section = "ExistingSection"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(existingNote);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var existingTags = new HashSet<string> { "ExistingTag1", "ExistingTag2" };
         await _tagsService.UpdateNoteTags(existingNote.Id, existingTags); // Initially add some tags
 
@@ -92,18 +101,25 @@ public class TagsServiceTests : DatabaseTestBase
     public async Task UpdateNoteTags_UsesExistingTagCaseInsensitive_WhenNewTagMatchesExistingTagCaseInsensitive()
     {
         // Arrange
-        var firstNote = await _notesService.CreateNote(new NoteDto
+        var firstNote = new NoteEntity
         {
             Title = "First Note",
             Content = "First note content",
             Section = "SharedSection"
-        });
-        var secondNote = await _notesService.CreateNote(new NoteDto
+        };
+
+        DbFixture.DbContext.Notes.Add(firstNote);
+
+        var secondNote = new NoteEntity
         {
             Title = "Second Note",
             Content = "Second note content",
             Section = "SharedSection"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(secondNote);
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         // Add "newTag" to second note
         var existingTag = new HashSet<string> { "newTag" };
@@ -142,18 +158,26 @@ public class TagsServiceTests : DatabaseTestBase
     {
         // Arrange
         var section = "TestSection";
-        var note1 = await _notesService.CreateNote(new NoteDto
+
+        var note1 = new NoteEntity
         {
             Title = "Note 1",
             Content = "Content 1",
             Section = section
-        });
-        var note2 = await _notesService.CreateNote(new NoteDto
+        };
+
+        DbFixture.DbContext.Notes.Add(note1);
+
+        var note2 = new NoteEntity
         {
             Title = "Note 2",
             Content = "Content 2",
             Section = section
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note2);
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var sharedTag = "SharedTag";
         await _tagsService.UpdateNoteTags(note1.Id, [sharedTag]);
@@ -198,12 +222,17 @@ public class TagsServiceTests : DatabaseTestBase
     public async Task UpdateNoteTags_MakesNoChanges_IfNoteAlreadyHasProvidedTags()
     {
         // Arrange
-        var note = await _notesService.CreateNote(new NoteDto
+        var note = new NoteEntity
         {
             Title = "Note with Tags",
             Content = "Content",
             Section = "SectionWithTags"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var existingTags = new HashSet<string> { "ExistingTag1", "ExistingTag2" };
         await _tagsService.UpdateNoteTags(note.Id, existingTags); // Initially add some tags
 
@@ -233,18 +262,27 @@ public class TagsServiceTests : DatabaseTestBase
     {
         // Arrange
         var section = "SharedTagsSection";
-        var note1 = await _notesService.CreateNote(new NoteDto
+
+        var note1 = new NoteEntity
         {
             Title = "Note 1",
             Content = "Content for note 1",
             Section = section
-        });
-        var note2 = await _notesService.CreateNote(new NoteDto
+        };
+
+        DbFixture.DbContext.Notes.Add(note1);
+
+        var note2 = new NoteEntity
         {
             Title = "Note 2",
             Content = "Content for note 2",
             Section = section
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note2);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var sharedTagName = "SharedTag";
         var tagsForNote1 = new HashSet<string> { sharedTagName };
         var tagsForNote2 = new HashSet<string> { sharedTagName };
@@ -337,12 +375,17 @@ public class TagsServiceTests : DatabaseTestBase
     public async Task GetTags_ReturnsAllTags_WhenSectionIsNull()
     {
         // Arrange
-        var note = await _notesService.CreateNote(new NoteDto
+        var note = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = "section1"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var newTags = new HashSet<string> { "Tag1", "Tag2" };
         await _tagsService.UpdateNoteTags(note.Id, newTags);
 
@@ -359,31 +402,47 @@ public class TagsServiceTests : DatabaseTestBase
     {
         // Arrange
         var section = "section1";
-        var note = await _notesService.CreateNote(new NoteDto
+
+        var note1 = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = section
-        });
-        var newTagsSection1 = new HashSet<string> { "Tag1", "Tag2" };
-        await _tagsService.UpdateNoteTags(note.Id, newTagsSection1);
+        };
 
-        note = await _notesService.CreateNote(new NoteDto
+        DbFixture.DbContext.Notes.Add(note1);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
+        var newTagsSection1 = new HashSet<string> { "Tag1", "Tag2" };
+        await _tagsService.UpdateNoteTags(note1.Id, newTagsSection1);
+
+        var note2 = new NoteEntity
         {
             Title = "Another Note",
             Content = "Some more text",
             Section = section
-        });
-        await _tagsService.UpdateNoteTags(note.Id, ["Tag2"]);
+        };
 
-        note = await _notesService.CreateNote(new NoteDto
+        DbFixture.DbContext.Notes.Add(note2);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
+        await _tagsService.UpdateNoteTags(note2.Id, ["Tag2"]);
+
+        var note3 = new NoteEntity
         {
             Title = "Another Note",
             Content = "Some more text",
             Section = "section2"
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(note3);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
         var newTagsSection2 = new HashSet<string> { "Tag3" };
-        await _tagsService.UpdateNoteTags(note.Id, newTagsSection2);
+        await _tagsService.UpdateNoteTags(note3.Id, newTagsSection2);
 
         // Act
         var results = await _tagsService.GetTags(section);
@@ -391,8 +450,8 @@ public class TagsServiceTests : DatabaseTestBase
         // Assert
         var expectedResults = new List<TagsServiceGetTagsResultItem>
         {
-            new() { Id = 1, Name = "Tag1", Number = 1 },
-            new() { Id = 2, Name = "Tag2", Number = 2 }
+            new() { Id = 1, Name = "Tag1", Count = 1 },
+            new() { Id = 2, Name = "Tag2", Count = 2 }
         };
 
         results.Should().BeEquivalentTo(expectedResults);

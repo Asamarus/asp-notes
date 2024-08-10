@@ -1,10 +1,11 @@
 import { BrowserRouter } from 'react-router-dom'
 import { MantineProvider } from '@mantine/core'
-import { theme } from './misc/theme'
-import AccountsProvider from './providers/accountsProvider'
-import ApplicationProvider from './providers/applicationProvider'
+import { theme } from '@/misc/theme'
 import { Notifications } from '@mantine/notifications'
 import BrowserApiMockProvider from '@/mocks/api/BrowserApiMockProvider'
+import AccountsLoader from '@/loaders/accountsLoader'
+import ApplicationLoader from '@/loaders/appplicationLoader'
+import SectionsLoader from '@/loaders/sectionsLoader'
 
 export interface ProvidersProps {
   /** The content of the component */
@@ -16,9 +17,11 @@ function Providers({ children }: ProvidersProps) {
       <BrowserRouter>
         <MantineProvider theme={theme}>
           <Notifications position="top-center" />
-          <AccountsProvider>
-            <ApplicationProvider>{children}</ApplicationProvider>
-          </AccountsProvider>
+          <AccountsLoader>
+            <ApplicationLoader>
+              <SectionsLoader>{children}</SectionsLoader>
+            </ApplicationLoader>
+          </AccountsLoader>
         </MantineProvider>
       </BrowserRouter>
     </BrowserApiMockProvider>

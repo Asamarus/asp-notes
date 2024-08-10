@@ -3,8 +3,14 @@ using System.Text.RegularExpressions;
 
 namespace AspNotes.Core.Tag;
 
+/// <summary>
+/// Provides utilities for working with tag lists, including methods to compress and extract tags.
+/// </summary>
 public partial class TagsHelper
 {
+    /// <summary>
+    /// A regular expression for replacing brackets in tag strings.
+    /// </summary>
     [GeneratedRegex(@"\[|\]")]
     private static partial Regex TagsReplaceRegex();
 
@@ -52,6 +58,10 @@ public partial class TagsHelper
         return result;
     }
 
+    /// <summary>
+    /// Provides a <see cref="ValueConverter{TModel,TProvider}"/> for converting between lists of tags and their string representation.
+    /// </summary>
+    /// <returns>A <see cref="ValueConverter{TModel,TProvider}"/> that can be used to convert between a list of strings and a single string representation.</returns>
     public static ValueConverter<List<string>, string> GetTagsConverter()
     {
         return new ValueConverter<List<string>, string>(

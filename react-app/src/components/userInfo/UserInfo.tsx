@@ -1,12 +1,12 @@
 import { Menu, ActionIcon } from '@mantine/core'
-import { MdAccountCircle, MdLogout, MdVpnKey } from 'react-icons/md'
-import { useContext } from 'react'
-import { AccountsContext } from '@/providers/accountsProvider'
 import { openChangePasswordModal } from '@/modals'
+import { accountsActions } from '@/actions'
+import { useAccountsStore } from '@/store'
+
+import { MdAccountCircle, MdLogout, MdVpnKey } from 'react-icons/md'
 
 function UserInfo() {
-  const { user, logout } = useContext(AccountsContext)
-
+  const user = useAccountsStore((state) => state.user)
   return (
     <Menu
       shadow="md"
@@ -42,7 +42,7 @@ function UserInfo() {
         </Menu.Item>
         <Menu.Item
           leftSection={<MdLogout size={20} />}
-          onClick={logout}
+          onClick={accountsActions.logout}
         >
           Logout
         </Menu.Item>

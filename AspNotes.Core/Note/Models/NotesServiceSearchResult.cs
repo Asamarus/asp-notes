@@ -2,7 +2,7 @@
 
 public class NotesServiceSearchResult
 {
-    public List<NoteDto> Rows { get; set; } = [];
+    public List<NoteDto> Notes { get; set; } = [];
 
     public int Total { get; set; }
 
@@ -10,7 +10,7 @@ public class NotesServiceSearchResult
 
     public int LastPage { get; set; }
 
-    public bool LoadMore { get; set; } = false;
+    public bool CanLoadMore { get; set; } = false;
 
     public int Page { get; set; }
 

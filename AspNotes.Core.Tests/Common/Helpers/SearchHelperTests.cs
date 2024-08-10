@@ -178,12 +178,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "This is some string";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note 1",
             Content = searchPhrase,
             Section = "section1"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 
@@ -211,12 +214,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "text some";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note 1",
             Content = "Some text to find",
             Section = "section1"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 
@@ -244,12 +250,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "keyword unique";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note 2",
             Content = "This contains the unique keyword",
             Section = "section2"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 
@@ -276,12 +285,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "partial xyz";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note 3",
             Content = "This note contains a somepartialmatch",
             Section = "section3"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 
@@ -309,12 +321,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "longkeyword";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note 4",
             Content = "This contains longkey",
             Section = "section4"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 
@@ -341,12 +356,15 @@ public class SearchHelperTests : DatabaseTestBase
     {
         // Arrange
         var searchPhrase = "not found";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Title",
             Content = "This is text",
             Section = "section1"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         var n = new NotesTable("n");
 

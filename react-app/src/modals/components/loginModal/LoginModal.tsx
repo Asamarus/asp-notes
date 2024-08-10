@@ -1,4 +1,8 @@
-import { AccountsContext } from '@/providers/accountsProvider'
+import { useForm } from 'react-hook-form'
+import { accountsActions } from '@/actions'
+import { useAccountsStore } from '@/store'
+import isEmail from '@/helpers/isEmail'
+
 import {
   Group,
   Title,
@@ -9,12 +13,8 @@ import {
   useMantineTheme,
   useMantineColorScheme,
 } from '@mantine/core'
-import { useForm } from 'react-hook-form'
-import type { SubmitHandler } from 'react-hook-form'
 import { TbAt, TbLock } from 'react-icons/tb'
 import { MdAccountCircle, MdLogin } from 'react-icons/md'
-import { useContext } from 'react'
-import isEmail from '@/helpers/isEmail'
 
 type Inputs = {
   email: string
@@ -22,7 +22,8 @@ type Inputs = {
 }
 
 function LoginModal() {
-  const { login, isLoginLoading } = useContext(AccountsContext)
+  const { isLoginLoading } = useAccountsStore((state) => state)
+
   const { colorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
 
@@ -36,10 +37,6 @@ function LoginModal() {
       password: '',
     },
   })
-
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    login(data.email, data.password)
-  }
 
   return (
     <>
@@ -58,7 +55,11 @@ function LoginModal() {
           Login
         </Title>
       </Group>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          accountsActions.login(data.email, data.password)
+        })}
+      >
         <Fieldset
           disabled={isLoginLoading}
           variant="unstyled"

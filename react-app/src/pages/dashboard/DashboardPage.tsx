@@ -1,10 +1,9 @@
-import { useContext } from 'react'
-import { ApplicationContext } from '@/providers/applicationProvider'
+import { useApplicationStore } from '@/store'
 
 import { Title, Text, Paper } from '@mantine/core'
 
 function DashboardPage() {
-  const { initialData } = useContext(ApplicationContext)
+  const allNotesSection = useApplicationStore((state) => state.allNotesSection)
 
   return (
     <Paper
@@ -13,10 +12,11 @@ function DashboardPage() {
     >
       <Title mb={20}>Dashboard</Title>
       <Text>Paper is the most basic ui component</Text>
-      {initialData && (
+      {allNotesSection && (
         <>
-          <Text>initialData.title: {initialData.title}</Text>
-          <Text>initialData.someData: {initialData.someData}</Text>
+          <Text>allNotesSection.name: {allNotesSection.name}</Text>
+          <Text>allNotesSection.displayName: {allNotesSection.displayName}</Text>
+          <Text>allNotesSection.color: {allNotesSection.color}</Text>
         </>
       )}
     </Paper>

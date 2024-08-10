@@ -63,7 +63,7 @@ public class TagsService(NotesDbContext context, QueryFactory db, ILogger<TagsSe
                     {
                         Id = tag.Id,
                         Name = tag.Name,
-                        Number = 1
+                        Count = 1
                     })
                     .ToListAsync();
 
@@ -99,11 +99,11 @@ public class TagsService(NotesDbContext context, QueryFactory db, ILogger<TagsSe
 
                 sectionTags.Where(st => noteTagsToRemove.Any(r => r.Id == st.Id))
                             .ToList()
-                            .ForEach(st => st.Number--);
+                            .ForEach(st => st.Count--);
             }
 
             var unusedTags = sectionTags
-                .Where(x => x.Number == 0)
+                .Where(x => x.Count == 0)
                 .ToHashSet();
 
             if (unusedTags.Count > 0)
@@ -171,7 +171,7 @@ public class TagsService(NotesDbContext context, QueryFactory db, ILogger<TagsSe
 
         var query = db.Query()
             .Select(t.Id, t.Name)
-            .SelectRaw($"Count({nt.Id}) as Number")
+            .SelectRaw($"Count({nt.Id}) as Count")
             .From(t.GetFormattedTableName())
             .LeftJoin(nt.GetFormattedTableName(), t.Id, nt.TagId)
             .GroupByRaw($"{t.Name}, {t.Id}");
@@ -185,7 +185,7 @@ public class TagsService(NotesDbContext context, QueryFactory db, ILogger<TagsSe
         {
             Id = tag.Id,
             Name = tag.Name,
-            Number = tag.Number
+            Count = tag.Count
         }).OrderBy(tag => tag.Name, StringComparer.OrdinalIgnoreCase)];
     }
 }

@@ -26,12 +26,15 @@ public class BooksServiceTests : DatabaseTestBase
     {
         // Arrange
         var bookName = "New book";
-        await _notesService.CreateNote(new NoteDto
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = "section1"
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         // Act
         var updated = await _booksService.UpdateNoteBook(1L, bookName);
@@ -56,12 +59,14 @@ public class BooksServiceTests : DatabaseTestBase
         await DbFixture.DbContext.Books.AddAsync(new BookEntity { Name = existingBookName, Section = section });
         await DbFixture.DbContext.SaveChangesAsync();
 
-        await _notesService.CreateNote(new NoteDto
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = section
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         // Act
         var updated = await _booksService.UpdateNoteBook(1L, existingBookName);
@@ -86,13 +91,18 @@ public class BooksServiceTests : DatabaseTestBase
         await DbFixture.DbContext.Books.AddAsync(new BookEntity { Name = oldBookName, Section = section });
         await DbFixture.DbContext.SaveChangesAsync();
 
-        var newNote = await _notesService.CreateNote(new NoteDto
+        var newNote = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
-            Book = oldBookName,
             Section = section
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(newNote);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
+        await _booksService.UpdateNoteBook(newNote.Id, oldBookName);
 
         // Act
         var updated = await _booksService.UpdateNoteBook(newNote.Id, newBookName);
@@ -120,21 +130,24 @@ public class BooksServiceTests : DatabaseTestBase
         await DbFixture.DbContext.Books.AddAsync(new BookEntity { Name = oldBookName, Section = section });
         await DbFixture.DbContext.SaveChangesAsync();
 
-        var newNote = await _notesService.CreateNote(new NoteDto
+        var newNote = new NoteEntity
         {
             Title = "Note title 1",
             Content = "Some text 1",
             Book = oldBookName,
             Section = section
-        });
+        };
 
-        await _notesService.CreateNote(new NoteDto
+        DbFixture.DbContext.Notes.Add(newNote);
+        DbFixture.DbContext.Notes.Add(new NoteEntity
         {
             Title = "Note title 2",
             Content = "Some text 2",
             Book = oldBookName,
             Section = section
         });
+
+        await DbFixture.DbContext.SaveChangesAsync();
 
         // Act
         var updated = await _booksService.UpdateNoteBook(newNote.Id, newBookName);
@@ -172,12 +185,16 @@ public class BooksServiceTests : DatabaseTestBase
         var bookName = "Some book";
         var section = "section1";
 
-        var newNote = await _notesService.CreateNote(new NoteDto
+        var newNote = new NoteEntity
         {
             Title = "Note title 1",
             Content = "Some text 1",
             Section = section
-        });
+        };
+
+        DbFixture.DbContext.Notes.Add(newNote);
+
+        await DbFixture.DbContext.SaveChangesAsync();
         await _booksService.UpdateNoteBook(newNote.Id, "Some book");
 
         // Act
@@ -287,29 +304,42 @@ public class BooksServiceTests : DatabaseTestBase
     {
         // Arrange
         var section = "section1";
-        var note = await _notesService.CreateNote(new NoteDto
-        {
-            Title = "Note title",
-            Content = "Some text",
-            Section = section
-        });
-        await _booksService.UpdateNoteBook(note.Id, "Book One");
 
-        note = await _notesService.CreateNote(new NoteDto
+        var note1 = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = section
-        });
-        await _booksService.UpdateNoteBook(note.Id, "Book One");
+        };
 
-        note = await _notesService.CreateNote(new NoteDto
+        DbFixture.DbContext.Notes.Add(note1);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+        await _booksService.UpdateNoteBook(note1.Id, "Book One");
+
+        var note2 = new NoteEntity
         {
             Title = "Note title",
             Content = "Some text",
             Section = section
-        });
-        await _booksService.UpdateNoteBook(note.Id, "Book Two");
+        };
+
+        DbFixture.DbContext.Notes.Add(note2);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+        await _booksService.UpdateNoteBook(note2.Id, "Book One");
+
+        var note3 = new NoteEntity
+        {
+            Title = "Note title",
+            Content = "Some text",
+            Section = section
+        };
+
+        DbFixture.DbContext.Notes.Add(note3);
+
+        await DbFixture.DbContext.SaveChangesAsync();
+        await _booksService.UpdateNoteBook(note3.Id, "Book Two");
 
         // Act
         var results = await _booksService.GetBooks(section);
@@ -317,8 +347,8 @@ public class BooksServiceTests : DatabaseTestBase
         // Assert
         var expectedResults = new List<BooksServiceGetBooksResultItem>
         {
-            new() { Id = 1, Name = "Book One", Number = 2 },
-            new() { Id = 2, Name = "Book Two", Number = 1 }
+            new() { Id = 1, Name = "Book One", Count = 2 },
+            new() { Id = 2, Name = "Book Two", Count = 1 }
         };
 
         results.Should().BeEquivalentTo(expectedResults);

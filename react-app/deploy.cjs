@@ -3,8 +3,8 @@ const path = require('path')
 
 const indexPath = path.join(__dirname, './dist/index.html')
 const assetsPath = path.join(__dirname, './dist/assets')
-const targetAssetsPath = path.join(__dirname, '../ProjectTemplate/wwwroot/assets')
-const viewPath = path.join(__dirname, '../ProjectTemplate/Views/Home/Index.cshtml')
+const targetAssetsPath = path.join(__dirname, '../AspNotes.Web/wwwroot/assets')
+const viewPath = path.join(__dirname, '../AspNotes.Web/Views/Home/Index.cshtml')
 
 const data = fs.readFileSync(indexPath, 'utf8')
 

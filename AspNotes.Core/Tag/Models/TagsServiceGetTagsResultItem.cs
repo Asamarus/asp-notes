@@ -6,5 +6,5 @@ public class TagsServiceGetTagsResultItem
 
     public required string Name { get; set; }
 
-    public required long Number { get; set; }
+    public required long Count { get; set; }
 }

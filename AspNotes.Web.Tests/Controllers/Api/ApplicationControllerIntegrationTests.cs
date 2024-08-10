@@ -1,6 +1,7 @@
 ﻿using AspNotes.Core.Common.Helpers;
 using AspNotes.Web.Models.Application;
 using AspNotes.Web.Tests.Helpers;
+using FluentAssertions;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -11,6 +12,7 @@ public class ApplicationControllerIntegrationTests(CustomWebApplicationFactory<S
     public async Task GetInitialData_ReturnsInitialDataResponse()
     {
         // Arrange
+        var allNotesSection = TestHelper.GetAllNotesSection();
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TestHelper.GetTestUserToken());
 
@@ -25,8 +27,7 @@ public class ApplicationControllerIntegrationTests(CustomWebApplicationFactory<S
         var initialDataResponse = responseString.DeserializeJson<InitialDataResponse>();
 
         Assert.NotNull(initialDataResponse);
-        Assert.Equal("Project template title", initialDataResponse.Title);
-        Assert.Equal("Some data", initialDataResponse.SomeData);
+        initialDataResponse.AllNotesSection.Should().BeEquivalentTo(allNotesSection);
     }
 }
 

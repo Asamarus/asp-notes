@@ -2,6 +2,11 @@
 
 This is a work in progress note-taking application. This will be an new version of [Notes](https://github.com/Asamarus/notes) that will use ASP.Net Core and .Net 8 for the back-end instead of Node.js
 
+### Building and running with Docker
+
+`docker compose up --build` \
+Application will be available at http://localhost:8080
+
 ## Back-end NuGet Packages
 
 - **Entity Framework Core**: For object-relational mapping, specifically `Microsoft.EntityFrameworkCore.Sqlite` and `Microsoft.EntityFrameworkCore.Design`.
@@ -22,6 +27,7 @@ This is a work in progress note-taking application. This will be an new version 
 - **react-router-dom**: For routing in React applications.
 - **react-hook-form**: For managing forms and validation.
 - **react-icons**: To include icons from popular icon packs.
+- **zustand**: For state management
 
 ### Testing Libraries
 

@@ -4,17 +4,20 @@ using AspNotes.Core.Note;
 using AspNotes.Core.Section;
 using AspNotes.Core.Tag;
 using AspNotes.Core.User;
+using AspNotes.Web.Helpers;
 using AspNotes.Web.Middlewares;
 using AspNotes.Web.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Data.Common;
 using System.Text;
 using System.Text.Json;
 
@@ -28,16 +31,26 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         services.AddHttpClient();
         services.AddSingleton<AppCache>();
 
-        var connectionString = configuration.GetConnectionString("NotesDb")
+        services.AddSingleton<DbConnection>(container =>
+        {
+            var connectionString = configuration.GetConnectionString("NotesDb")
             ?? throw new InvalidOperationException("Connection string 'NotesDb' not found.");
 
-        services.AddDbContext<NotesDbContext>(options =>
-                   options.UseSqlite(connectionString, options => options.MigrationsAssembly("AspNotes.Web")));
+            var connection = new SqliteConnection(connectionString);
+            connection.Open();
+
+            return connection;
+        });
+
+        services.AddDbContext<NotesDbContext>((container, options) =>
+        {
+            var connection = container.GetRequiredService<DbConnection>();
+            options.UseSqlite(connection, options => options.MigrationsAssembly("AspNotes.Web"));
+        });
 
         services.AddScoped(sp =>
         {
-            var dbContext = sp.GetRequiredService<NotesDbContext>();
-            var connection = dbContext.GetDbConnection();
+            var connection = sp.GetRequiredService<DbConnection>();
             var compiler = new SqliteCompiler();
 
             var queryFactory = new QueryFactory(connection, compiler);
@@ -52,6 +65,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
             return queryFactory;
         });
 
+        services.Configure<AllNotesSection>(configuration.GetSection("AllNotesSection"));
         services.AddControllersWithViews(config =>
         {
             var policy = new AuthorizationPolicyBuilder()
@@ -85,11 +99,11 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
             c.IncludeXmlComments(filePath);
         });
 #endif
-
+        services.AddScoped<IUrlMetadataHelper, UrlMetadataHelper>();
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<ISectionsService, SectionsService>();
         services.AddScoped<INotesService, NotesService>();
-        services.AddScoped<IBookService, BooksService>();
+        services.AddScoped<IBooksService, BooksService>();
         services.AddScoped<ITagsService, TagsService>();
 
         var jwtSettingsSection = configuration.GetSection("JwtSettings");
@@ -126,7 +140,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         app.UseMiddleware<ExceptionHandlerMiddleware>();
         app.UseMiddleware<JwtCookieToHeaderMiddleware>();
 
-        if (environment.IsDevelopment())
+        if (environment.IsDevelopment() || environment.IsStaging())
         {
             dbContext.Database.Migrate();
 

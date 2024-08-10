@@ -2,7 +2,7 @@
 
 public class NotesServiceGetCalendarDaysResult
 {
-    public required long Number { get; set; }
+    public required long Count { get; set; }
 
     public required DateOnly Date { get; set; }
 }

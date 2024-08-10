@@ -2,6 +2,5 @@
 
 public class InitialDataResponse
 {
-    public string Title { get; set; } = null!;
-    public string SomeData { get; set; } = null!;
+    public AllNotesSection AllNotesSection { get; set; } = null!;
 }

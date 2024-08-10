@@ -12,6 +12,7 @@ async function getBodyAsJson(res: Response) {
     const body = await clone.text()
     json = JSON.parse(body)
   } catch (error) {
+    console.error('getBodyAsJson', error)
     // The body is not a valid JSON object
   }
 
@@ -19,21 +20,21 @@ async function getBodyAsJson(res: Response) {
 }
 
 const unAuthorizedMiddleWare: Middleware = {
-  async onResponse(res) {
-    const { status } = res
+  async onResponse({ response }) {
+    const { status } = response
     if (status === 401) {
       dispatch(events.user.unAuthorized)
     }
 
-    return res
+    return response
   },
 }
 
 const errorHandlingMiddleWare: Middleware = {
-  async onResponse(res) {
-    const { status, body } = res
+  async onResponse({ response }) {
+    const { status, body } = response
     if ((status === 400 || status === 500) && body !== null) {
-      const jsonBody = await getBodyAsJson(res)
+      const jsonBody = await getBodyAsJson(response)
 
       if (jsonBody !== null) {
         if (
@@ -54,15 +55,15 @@ const errorHandlingMiddleWare: Middleware = {
       }
     }
 
-    return res
+    return response
   },
 }
 
 const successHandlingMiddleWare: Middleware = {
-  async onResponse(res) {
-    const { status, body } = res
+  async onResponse({ response }) {
+    const { status, body } = response
     if (status === 200 && body !== null) {
-      const jsonBody = await getBodyAsJson(res)
+      const jsonBody = await getBodyAsJson(response)
       if (
         jsonBody.message &&
         typeof jsonBody.message === 'string' &&
@@ -72,7 +73,7 @@ const successHandlingMiddleWare: Middleware = {
       }
     }
 
-    return res
+    return response
   },
 }
 

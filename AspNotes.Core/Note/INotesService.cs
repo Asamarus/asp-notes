@@ -9,7 +9,9 @@ public interface INotesService
     Task<List<NotesServiceAutocompleteResult>> Autocomplete(string searchTerm, string? section = null);
     Task<List<NotesServiceGetCalendarDaysResult>> GetCalendarDays(int month, int year, string? section = null);
     Task<NoteDto?> GetNoteById(long id);
-    Task<NoteDto> CreateNote(NoteDto note);
-    Task<NoteDto> UpdateNote(NoteDto note);
+    Task<NoteDto> CreateNote(string section);
+    Task<NoteDto> UpdateNoteSection(long id, string section);
+    Task<NoteDto> UpdateNoteTitleAndContent(long id, string title, string content);
+    Task<NoteDto> UpdateNoteSources(long id, List<NoteSource> sources);
     Task<bool> DeleteNote(long id);
 }

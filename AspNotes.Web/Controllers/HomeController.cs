@@ -8,7 +8,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        ViewData["Title"] = "Project template title";
+        ViewData["Title"] = "Notes";
 
         return View();
     }

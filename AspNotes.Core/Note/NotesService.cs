@@ -170,12 +170,12 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
         query.ClearComponent("offset");
         int totalCount = await query.AsCount().FirstAsync<int>();
 
-        result.Rows = notesList;
+        result.Notes = notesList;
         result.Total = totalCount;
         result.Count = notesList.Count;
         result.LastPage = (int)Math.Ceiling((double)totalCount / request.ResultsPerPage);
         result.Page = request.Page;
-        result.LoadMore = totalCount > request.Page * request.ResultsPerPage;
+        result.CanLoadMore = totalCount > request.Page * request.ResultsPerPage;
 
         return result;
     }
@@ -204,7 +204,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
 
         return [.. notes.Select(note => new NotesServiceAutocompleteResult
         {
-            Id = note.Id.ToString(),
+            Id = note.Id,
             Title = note.Title
         }).OrderBy(note => note.Title, StringComparer.OrdinalIgnoreCase)];
     }
@@ -224,7 +224,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
         var n = new NotesTable("n");
 
         var query = db.Query()
-            .SelectRaw($"COUNT({n.Id}) as Number, date({n.CreatedAt}) as Date")
+            .SelectRaw($"COUNT({n.Id}) as Count, date({n.CreatedAt}) as Date")
             .From(n.GetFormattedTableName())
             .WhereRaw($"{n.CreatedAt} >= ?", startDate.ToString("yyyy-MM-dd HH:mm:ss"))
             .WhereRaw($"{n.CreatedAt} <= ?", endDate.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -240,7 +240,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
 
         return [.. result.Select(r => new NotesServiceGetCalendarDaysResult
         {
-            Number = r.Number,
+            Count = r.Count,
             Date = DateOnly.ParseExact((string)r.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
         })];
     }
@@ -252,7 +252,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
     /// <returns>A task that represents the asynchronous operation. The task result contains the note if found; otherwise, <c>null</c>.</returns>
     public async Task<NoteDto?> GetNoteById(long id)
     {
-        var noteEntity = await context.Notes.FindAsync(id);
+        var noteEntity = await context.Notes.AsNoTracking().FirstOrDefaultAsync(n => n.Id == id);
 
         if (noteEntity == null)
             return null;
@@ -261,18 +261,15 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
     }
 
     /// <summary>
-    /// Creates a new note with the specified details.
+    /// Creates a new note within the specified section.
     /// </summary>
-    /// <param name="note">The details of the note to create.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the details of the created note.</returns>
-    public async Task<NoteDto> CreateNote(NoteDto note)
+    /// <param name="section">The section where the note will be created.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the details of the newly created note.</returns>
+    public async Task<NoteDto> CreateNote(string section)
     {
         var noteEntity = new NoteEntity
         {
-            Title = note.Title,
-            Section = note.Section,
-            Content = note.Content,
-            Book = note.Book,
+            Section = section,
         };
 
         context.Notes.Add(noteEntity);
@@ -282,16 +279,65 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
     }
 
     /// <summary>
-    /// Updates an existing note with the specified details.
+    /// Updates the section of a note identified by its ID.
     /// </summary>
-    /// <param name="note">The new details of the note to update.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the updated note details.</returns>
-    public async Task<NoteDto> UpdateNote(NoteDto note)
+    /// <param name="id">The ID of the note to update.</param>
+    /// <param name="section">The new section to assign to the note.</param>
+    /// <returns>The updated NoteDto object if the update is successful; otherwise, null.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when a note with the specified ID is not found.</exception>
+    public async Task<NoteDto> UpdateNoteSection(long id, string section)
     {
-        var noteEntity = await context.Notes.FindAsync(note.Id) ?? throw new InvalidOperationException("Note not found.");
-        noteEntity.Title = note.Title;
-        noteEntity.Content = note.Content;
-        noteEntity.Sources = note.Sources;
+        var noteEntity = await context.Notes.FindAsync(id) ?? throw new InvalidOperationException("Note not found.");
+
+        noteEntity.Section = section;
+
+        await context.SaveChangesAsync();
+
+        return new NoteDto(noteEntity);
+    }
+
+    /// <summary>
+    /// Updates the title and content of a note identified by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the note to update.</param>
+    /// <param name="title">The new title for the note.</param>
+    /// <param name="content">The new content of the note.</param>
+    /// <returns>The updated NoteDto object if the update is successful; otherwise, null.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when a note with the specified ID is not found.</exception>
+    public async Task<NoteDto> UpdateNoteTitleAndContent(long id, string title, string content)
+    {
+        var noteEntity = await context.Notes.FindAsync(id) ?? throw new InvalidOperationException("Note not found.");
+
+        if (noteEntity.Title != title)
+        {
+            noteEntity.TitleSearchIndex = string.IsNullOrEmpty(title) ? null : SearchHelper.GetSearchIndex(title);
+            noteEntity.Title = title;
+        }
+
+        if (noteEntity.Content != content)
+        {
+            noteEntity.ContentSearchIndex = string.IsNullOrEmpty(content) ? null : SearchHelper.GetSearchIndex(content);
+            noteEntity.Preview = string.IsNullOrEmpty(content) ? null : SearchHelper.GetSearchIndex(content, false, 100);
+            noteEntity.Content = content;
+        }
+
+        await context.SaveChangesAsync();
+
+        return new NoteDto(noteEntity);
+    }
+
+    /// <summary>
+    /// Updates the sources of a note identified by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the note to update.</param>
+    /// <param name="sources">The new list of sources to assign to the note.</param>
+    /// <returns>The updated NoteDto object if the update is successful; otherwise, null.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when a note with the specified ID is not found.</exception>
+    public async Task<NoteDto> UpdateNoteSources(long id, List<NoteSource> sources)
+    {
+        var noteEntity = await context.Notes.FindAsync(id) ?? throw new InvalidOperationException("Note not found.");
+
+        noteEntity.Sources = sources;
 
         await context.SaveChangesAsync();
 
@@ -303,6 +349,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
     /// </summary>
     /// <param name="id">The ID of the note to delete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains <c>true</c> if the note was successfully deleted; otherwise, <c>false</c>.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when a note with the specified ID is not found.</exception>
     public async Task<bool> DeleteNote(long id)
     {
         var noteEntity = await context.Notes.FindAsync(id) ?? throw new InvalidOperationException("Note not found.");

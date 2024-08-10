@@ -57,7 +57,9 @@ function useFetch<T, E, Arg = undefined>(
 
       const executeRequest = async () => {
         isLoadingRef.current = true
-        isMounted() && setIsLoading(true)
+        if (isMounted()) {
+          setIsLoading(true)
+        }
 
         activeRequestId.current = randomId()
         const currentRequestId = activeRequestId.current
@@ -71,7 +73,9 @@ function useFetch<T, E, Arg = undefined>(
 
         onResult?.(result)
         isLoadingRef.current = false
-        isMounted() && setIsLoading(false)
+        if (isMounted()) {
+          setIsLoading(false)
+        }
       }
 
       if (debounce) {

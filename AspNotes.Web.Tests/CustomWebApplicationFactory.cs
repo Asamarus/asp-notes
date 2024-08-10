@@ -8,77 +8,45 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 namespace AspNotes.Web.Tests;
 
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {
-    private SqliteConnection? _connection;
-
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(Environments.Development);
 
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(DbContextOptions<NotesDbContext>));
+            // Remove existing DbContextOptions<NotesDbContext> registration
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<NotesDbContext>));
+            if (dbContextDescriptor != null)
+                services.Remove(dbContextDescriptor);
 
-            if (descriptor != null)
-                services.Remove(descriptor);
+            // Remove existing DbConnection registration
+            var dbConnectionDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbConnection));
+            if (dbConnectionDescriptor != null)
+                services.Remove(dbConnectionDescriptor);
 
-            _connection = new SqliteConnection("Filename=:memory:");
-            _connection.Open();
-
-            services.AddDbContext<NotesDbContext>(options =>
+            // Create open SqliteConnection so EF won't automatically close it.
+            services.AddSingleton<DbConnection>(container =>
             {
-                options.UseSqlite(_connection, options => options.MigrationsAssembly("AspNotes.Web"));
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
+                return connection;
             });
 
-            var sp = services.BuildServiceProvider();
-
-            using var scope = sp.CreateScope();
-
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<NotesDbContext>();
-            var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
-            var logger = scopedServices
-                        .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-
-            try
-            {                
-                db.Database.Migrate();
-
-                // Seed the database with test data.
-                SeedData(db);
-            }
-            catch (Exception ex)
+            // Register NotesDbContext with SQLite connection
+            services.AddDbContext<NotesDbContext>((container, options) =>
             {
-                logger.LogError(ex, "An error occurred while migrating or initializing the database.");
-            }
+                var connection = container.GetRequiredService<DbConnection>();
+                options.UseSqlite(connection, options => options.MigrationsAssembly("AspNotes.Web"));
+            });
         });
-    }
-
-    private void SeedData(NotesDbContext context)
-    {
-        //var salt = UsersHelper.GenerateSalt();
-
-        //(var userEmail, var userPassword) = TestHelper.GetDefaultUserCredentials();
-
-        //context.Users.Add(new UserEntity { Email = userEmail, PasswordHash = UsersHelper.HashPassword(userPassword, salt), Salt = salt });
-        //context.SaveChanges();
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            _connection?.Close();
-            _connection?.Dispose();
-        }
     }
 }
 

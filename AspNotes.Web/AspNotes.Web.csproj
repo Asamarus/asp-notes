@@ -36,8 +36,8 @@
     <InternalsVisibleTo Include="AspNotes.Web.Tests" />
   </ItemGroup>
 
-  <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration)=='Debug'">		
-    <Exec Command="dotnet swagger tofile --output ../react-app/docs/openapi.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
+  <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration) == 'Debug' AND $(BuildingInsideVisualStudio) == true">
+	<Exec Command="dotnet swagger tofile --output ../react-app/docs/openapi.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
   </Target>
 
   <ItemGroup>

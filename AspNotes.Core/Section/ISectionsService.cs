@@ -9,8 +9,8 @@ public interface ISectionsService
     Task<bool> IsSectionNameValid(string name);
     Task<bool> IsSectionHavingNotes(string name);
     Task<List<SectionDto>> GetSections();
-    Task<long> CreateSection(SectionDto section);
-    Task<bool> UpdateSection(SectionDto section);
+    Task<long> CreateSection(string name, string displayName, string color);
+    Task<bool> UpdateSection(long id, string displayName, string color);
     Task<bool> DeleteSection(long id);
     Task<bool> ReorderSections(List<long> sectionIds);
 }

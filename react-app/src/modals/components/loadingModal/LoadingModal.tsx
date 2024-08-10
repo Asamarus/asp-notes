@@ -1,8 +1,6 @@
 import { Text, Progress } from '@mantine/core'
 import { useEffect } from 'react'
 
-Progress
-
 export interface LoadingModalProps {
   message?: string
 }

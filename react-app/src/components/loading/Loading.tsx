@@ -7,9 +7,7 @@ import styles from './Loading.module.css'
 export interface LoadingProps {
   className?: string
   style?: React.CSSProperties
-
   full?: boolean
-
   inline?: boolean
   /** Loader props */
   loaderProps?: LoaderProps
