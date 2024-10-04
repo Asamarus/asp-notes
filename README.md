@@ -27,7 +27,7 @@ Application will be available at http://localhost:8080
 - **react-router-dom**: For routing in React applications.
 - **react-hook-form**: For managing forms and validation.
 - **react-icons**: To include icons from popular icon packs.
-- **zustand**: For state management
+- **Redux**: For state management
 
 ### Testing Libraries
 
@@ -45,3 +45,5 @@ Application will be available at http://localhost:8080
 ## End-to-End Testing
 
 [Playwright](https://playwright.dev/) is used for end-to-end testing
+
+This project React application is using [Feature-Sliced Design (FSD)](https://feature-sliced.design/)

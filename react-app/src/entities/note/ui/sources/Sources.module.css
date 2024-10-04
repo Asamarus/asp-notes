@@ -1,0 +1,9 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: rem(5px);
+}
+
+.icon {
+  margin-right: rem(5px);
+}

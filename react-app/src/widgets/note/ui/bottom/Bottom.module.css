@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex-shrink: 0;
+  width: rem(5px);
+}

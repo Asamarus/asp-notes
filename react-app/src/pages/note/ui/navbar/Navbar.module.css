@@ -1,0 +1,27 @@
+.wrapper {
+  height: rem(50px);
+  display: flex;
+  align-items: center;
+  padding-left: rem(10px);
+  border-bottom: light-dark(1px solid transparent, 1px solid #373a40);
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0 rem(20px);
+}
+
+.title {
+  font-size: rem(20px);
+  font-weight: bold;
+  color: light-dark(#fff, #e9ecef);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+}

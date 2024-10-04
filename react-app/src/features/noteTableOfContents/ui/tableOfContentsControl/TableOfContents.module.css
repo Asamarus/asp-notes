@@ -1,0 +1,14 @@
+.headings-wrapper {
+  border: rem(1px) solid light-dark(#ddd, #5f6368);
+  border-radius: rem(4px);
+  padding: rem(5px);
+}
+
+.heading {
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  font-weight: 500;
+  font-size: rem(14px);
+  margin-bottom: rem(5px);
+}

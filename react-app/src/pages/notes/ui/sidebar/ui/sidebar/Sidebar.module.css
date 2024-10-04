@@ -1,0 +1,24 @@
+.wrapper {
+  width: rem(260px);
+  position: fixed;
+  z-index: 101;
+}
+
+.content {
+  background-color: light-dark(#fff, #202020);
+  height: 100%;
+}
+
+.inner {
+  padding: rem(10px);
+}
+
+.decorative {
+  width: rem(260px);
+  position: fixed;
+  top: 0;
+  box-shadow: light-dark(
+    2px 5px 15px 2px rgba(0, 0, 0, 0.1),
+    rgb(255 255 255 / 5%) -1px 0 0 0 inset
+  );
+}

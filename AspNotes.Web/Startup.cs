@@ -4,6 +4,7 @@ using AspNotes.Core.Note;
 using AspNotes.Core.Section;
 using AspNotes.Core.Tag;
 using AspNotes.Core.User;
+using AspNotes.Web.Common.Converters;
 using AspNotes.Web.Helpers;
 using AspNotes.Web.Middlewares;
 using AspNotes.Web.Models;
@@ -77,6 +78,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.JsonSerializerOptions.Converters.Add(new TrimmingStringJsonConverter());
         });
 
 #if DEBUG

@@ -95,7 +95,7 @@ public class SectionsControllerIntegrationTests(CustomWebApplicationFactory<Star
         Assert.Equal(3, validationErrors.Errors.Count);
 
         var idError = validationErrors.Errors.FirstOrDefault(e => e.Key == "Name");
-        Assert.Contains("Name must contain only Latin letters and no whitespaces!", idError.Value);
+        Assert.Contains("Name must contain only lowercase Latin letters, numbers, underscores and no whitespaces!", idError.Value);
 
         var colorError = validationErrors.Errors.FirstOrDefault(e => e.Key == "Color");
         Assert.Contains("Color must be a valid #hex color!", colorError.Value);
@@ -132,9 +132,7 @@ public class SectionsControllerIntegrationTests(CustomWebApplicationFactory<Star
         var responseData = responseContent.DeserializeJson<SectionsResponse>();
 
         Assert.NotNull(responseData);
-
         Assert.Equal("Section is created successfully!", responseData.Message);
-
         Assert.NotNull(responseData.Sections);
 
         var createdSection = responseData.Sections.FirstOrDefault(s => s.Name == newSection.Name);
@@ -145,6 +143,47 @@ public class SectionsControllerIntegrationTests(CustomWebApplicationFactory<Star
         Assert.Equal(newSection.Name, createdSection.Name);
         Assert.Equal(newSection.DisplayName, createdSection.DisplayName);
         Assert.Equal(newSection.Color, createdSection.Color);
+    }
+
+    [Fact]
+    public async Task CreateSection_ReturnsOk_WithTrimmedData()
+    {
+        // Arrange
+        var client = factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TestHelper.GetTestUserToken());
+
+        using var scope = factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
+
+        var newSection = new CreateSectionRequest
+        {
+            Name = "newsection ",
+            DisplayName = "New Section ",
+            Color = "#000000 "
+        };
+        var content = JsonContent.Create(newSection);
+
+        // Act
+        var response = await client.PostAsync("/api/sections/create", content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseData = responseContent.DeserializeJson<SectionsResponse>();
+
+        Assert.NotNull(responseData);
+        Assert.Equal("Section is created successfully!", responseData.Message);
+        Assert.NotNull(responseData.Sections);
+
+        var createdSection = responseData.Sections.FirstOrDefault(s => s.Name == newSection.Name.Trim());
+
+        Assert.NotNull(createdSection);
+
+        Assert.True(createdSection.Id > 0);
+        Assert.Equal(newSection.Name.Trim(), createdSection.Name);
+        Assert.Equal(newSection.DisplayName.Trim(), createdSection.DisplayName);
+        Assert.Equal(newSection.Color.Trim(), createdSection.Color);
     }
 
     [Fact]

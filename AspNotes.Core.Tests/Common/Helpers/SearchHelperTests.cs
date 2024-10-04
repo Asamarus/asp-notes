@@ -183,6 +183,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Note 1",
             Content = searchPhrase,
+            ContentSearchIndex = searchPhrase,
             Section = "section1"
         });
 
@@ -219,6 +220,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Note 1",
             Content = "Some text to find",
+            ContentSearchIndex = "Some text to find",
             Section = "section1"
         });
 
@@ -255,6 +257,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Note 2",
             Content = "This contains the unique keyword",
+            ContentSearchIndex = "This contains the unique keyword",
             Section = "section2"
         });
 
@@ -290,6 +293,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Note 3",
             Content = "This note contains a somepartialmatch",
+            ContentSearchIndex = "This note contains a somepartialmatch xyz",
             Section = "section3"
         });
 
@@ -326,6 +330,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Note 4",
             Content = "This contains longkey",
+            ContentSearchIndex = "This contains longkey",
             Section = "section4"
         });
 
@@ -361,6 +366,7 @@ public class SearchHelperTests : DatabaseTestBase
         {
             Title = "Title",
             Content = "This is text",
+            ContentSearchIndex = "This is text",
             Section = "section1"
         });
 

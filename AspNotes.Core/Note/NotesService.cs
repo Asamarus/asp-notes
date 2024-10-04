@@ -119,10 +119,10 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
 
         if (request.InRandomOrder)
             query.OrderByRaw("RANDOM()");
+        else
+            query.OrderByDesc(n.CreatedAt);
 
         var notes = await query.GetAsync();
-
-        var dateFormats = new string[] { "yyyy-MM-dd HH:mm:ss.fffffff", "yyyy-MM-dd HH:mm:ss" };
 
         var notesList = notes.Select(note =>
         {
@@ -136,7 +136,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
                 Book = note.Book,
             };
 
-            if (DateTime.TryParseExact(note.CreatedAt, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime createdAtDateTime))
+            if (DateTime.TryParseExact(note.CreatedAt, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime createdAtDateTime))
                 noteDto.CreatedAt = createdAtDateTime;
 
             if (!string.IsNullOrEmpty(note.Tags))
@@ -146,7 +146,7 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
 
             if (!string.IsNullOrEmpty(note.Sources))
             {
-                var sources = JsonHelper.DeserializeJson<NoteSource>(note.Sources);
+                var sources = JsonHelper.DeserializeJson<List<NoteSource>>(note.Sources);
 
                 if (sources != null)
                 {
@@ -185,8 +185,9 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
     /// </summary>
     /// <param name="searchTerm">The search term for filtering note titles.</param>
     /// <param name="section">Optional. The section to further filter the notes.</param>
+    /// <param name="book">Optional. The book to further filter the notes.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of autocomplete suggestions.</returns>
-    public async Task<List<NotesServiceAutocompleteResult>> Autocomplete(string searchTerm, string? section = null)
+    public async Task<List<NotesServiceAutocompleteResult>> Autocomplete(string searchTerm, string? section = null, string? book = null)
     {
         var n = new NotesTable("n");
 
@@ -199,6 +200,9 @@ public class NotesService(NotesDbContext context, QueryFactory db) : INotesServi
 
         if (!string.IsNullOrEmpty(section))
             query.Where(n.Section, section);
+
+        if (!string.IsNullOrEmpty(book))
+            query.Where(n.Book, book);
 
         var notes = await query.GetAsync();
 

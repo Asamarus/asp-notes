@@ -1,0 +1,5 @@
+.top {
+  margin-bottom: rem(5px);
+  display: flex;
+  align-items: center;
+}

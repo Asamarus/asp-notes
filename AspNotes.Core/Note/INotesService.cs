@@ -6,7 +6,7 @@ public interface INotesService
 {
     Task<bool> IsNoteIdPresent(long id);
     Task<NotesServiceSearchResult> Search(NotesServiceSearchRequest request);
-    Task<List<NotesServiceAutocompleteResult>> Autocomplete(string searchTerm, string? section = null);
+    Task<List<NotesServiceAutocompleteResult>> Autocomplete(string searchTerm, string? section = null, string? book = null);
     Task<List<NotesServiceGetCalendarDaysResult>> GetCalendarDays(int month, int year, string? section = null);
     Task<NoteDto?> GetNoteById(long id);
     Task<NoteDto> CreateNote(string section);

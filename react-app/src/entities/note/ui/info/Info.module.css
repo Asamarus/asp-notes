@@ -1,0 +1,11 @@
+.wrapper {
+  color: #656464;
+  font-size: rem(12px);
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: initial;
+}
+
+.wrapper-flex {
+  flex: 1 1 0;
+}

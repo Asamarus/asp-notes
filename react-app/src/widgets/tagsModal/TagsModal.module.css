@@ -1,0 +1,30 @@
+.list {
+  background-color: var(--mantine-color-body);
+  padding: var(--mantine-spacing-xs) rem(6px);
+  border: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+  border-top: 0;
+  border-bottom-left-radius: var(--mantine-radius-md);
+  border-bottom-right-radius: var(--mantine-radius-md);
+}
+
+.input {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.checkbox {
+  pointer-events: none;
+}
+
+.pill {
+  flex-shrink: 0;
+  color: #fff;
+  padding: rem(4px) rem(8px);
+  font-size: rem(12px);
+  font-weight: bold;
+  border-radius: rem(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: rem(5px);
+}

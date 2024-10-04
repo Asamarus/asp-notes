@@ -1,0 +1,15 @@
+.wrapper {
+  min-height: rem(400px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.full {
+  height: 100%;
+}
+
+.inline {
+  display: inline-flex;
+  min-height: rem(40px);
+}

@@ -1,0 +1,11 @@
+.wrapper {
+  position: relative;
+
+  @media (min-width: 1024px) {
+    padding: rem(120px) rem(20px) rem(20px) rem(280px);
+  }
+
+  @media (max-width: 1023px) {
+    padding: rem(120px) rem(20px) rem(20px);
+  }
+}

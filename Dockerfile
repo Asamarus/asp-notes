@@ -23,9 +23,6 @@ COPY --from=frontend-build /source /source
 # Set the working directory
 WORKDIR /source/AspNotes.Web
 
-# Ensure that db folder is created
-RUN mkdir db
-
 # This is the architecture you’re building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
 ARG TARGETARCH

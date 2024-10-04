@@ -1,0 +1,44 @@
+.header {
+  cursor: pointer;
+  padding: rem(10px);
+  height: rem(50px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.title {
+  color: light-dark(#fff, #c1c2c5);
+  font-size: rem(20px);
+  font-weight: bold;
+}
+
+.caret {
+  color: light-dark(#fff, #c1c2c5);
+}
+
+.section {
+  text-decoration: none;
+  user-select: none;
+  cursor: pointer;
+  color: light-dark(#fff, #c1c2c5);
+  display: flex;
+  align-items: center;
+  height: rem(40px);
+  padding: rem(10px);
+  font-size: rem(18px);
+  font-weight: bold;
+  border-bottom: light-dark(1px solid #fff, 1px solid #373a40);
+
+  &:first-of-type {
+    border-top: light-dark(1px solid #fff, 1px solid #373a40);
+  }
+
+  &:hover,
+  &:active,
+  &:visited,
+  &:focus {
+    color: light-dark(#fff, #c1c2c5);
+  }
+}

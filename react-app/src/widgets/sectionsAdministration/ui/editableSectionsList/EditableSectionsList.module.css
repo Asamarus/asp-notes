@@ -1,0 +1,24 @@
+.wrapper {
+  position: relative;
+}
+
+.item {
+  background-color: var(--mantine-color-body);
+}
+
+.color {
+  width: rem(20px);
+  height: rem(20px);
+  flex-shrink: 0;
+}
+
+.content {
+  display: flex;
+  gap: rem(20px);
+  align-items: center;
+}
+
+.title {
+  font-size: rem(20px);
+  color: light-dark(var(#333), #c1c2c5);
+}

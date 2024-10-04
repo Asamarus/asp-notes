@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest'
 import { vi } from 'vitest'
 import { expect } from 'vitest'
 import * as matchers from '@testing-library/jest-dom/matchers'
-import { server } from './src/mocks/api/server'
+import { server } from './src/app/lib/msw/server'
 
 beforeAll(() => {
   // Start the interception.

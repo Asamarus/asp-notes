@@ -36,7 +36,9 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
             Id = Guid.NewGuid().ToString(),
             Link = request.Link,
             Title = urlMetadata.Title,
-            Description = urlMetadata.Description,
+            Description = urlMetadata.Description?.Length > 100
+                    ? urlMetadata.Description[..100] + "..."
+                    : urlMetadata.Description,
             Image = urlMetadata.Image,
             ShowImage = !string.IsNullOrEmpty(urlMetadata.Image)
         });
@@ -46,6 +48,7 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
         var response = new SourcesResponse
         {
             Message = "New note source is created successfully!",
+            ShowNotification = true,
             Sources = updatedNote.Sources.Select(x => new SourceItemResponse(x)).ToList()
         };
 
@@ -85,6 +88,7 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
         var response = new SourcesResponse
         {
             Message = "New note source is updated successfully!",
+            ShowNotification = true,
             Sources = updatedNote.Sources.Select(x => new SourceItemResponse(x)).ToList()
         };
 
@@ -120,6 +124,7 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
         var response = new SourcesResponse
         {
             Message = "Note source is removed successfully!",
+            ShowNotification = true,
             Sources = updatedNote.Sources.Select(x => new SourceItemResponse(x)).ToList()
         };
 
@@ -160,6 +165,7 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
         var response = new SourcesResponse
         {
             Message = "Note sources are reordered successfully!",
+            ShowNotification = true,
             Sources = updatedNote.Sources.Select(x => new SourceItemResponse(x)).ToList()
         };
 

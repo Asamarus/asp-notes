@@ -1,0 +1,4 @@
+.wrapper {
+  background-color: light-dark(#fff, #1a1b1e);
+  height: calc(100vh - rem(50px));
+}

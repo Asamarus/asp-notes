@@ -37,7 +37,7 @@ public class NotesController(
         var searchRequest = new NotesServiceSearchRequest
         {
             Section = request.Section,
-            SearchTerm = request.SearchTerm,
+            SearchTerm = request.SearchTerm?.ToLower(),
             Page = request.Page,
             Book = request.Book,
             Tags = new List<string>(request.Tags),
@@ -81,7 +81,7 @@ public class NotesController(
         if (!string.IsNullOrEmpty(request.Section) && !await sectionsService.IsSectionNameValid(request.Section))
             return BadRequest(new ErrorResponse { Message = $"Section with Name '{request.Section}' is not found!" });
 
-        var notes = await notesService.Autocomplete(request.SearchTerm, request.Section);
+        var notes = await notesService.Autocomplete(request.SearchTerm, request.Section, request.Book);
         var books = await booksService.Autocomplete(request.SearchTerm, request.Section);
         var tags = await tagsService.Autocomplete(request.SearchTerm, request.Section);
 
@@ -240,6 +240,8 @@ public class NotesController(
 
         if (!await tagsService.UpdateNoteTags(note.Id, request.Tags))
             return BadRequest(new ErrorResponse { Message = $"Tags update failed!" });
+
+        note = await notesService.GetNoteById(request.Id);
 
         if (note == null)
             return BadRequest(new ErrorResponse { Message = $"Note with id '{request.Id}' is not found!" });

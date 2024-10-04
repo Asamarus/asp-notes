@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.top {
+  padding: rem(5px);
+  border-bottom: rem(1px) solid light-dark(#ddd, #5f6368);
+}
+
+.content {
+  position: relative;
+  flex: 1 1 0;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.content-inner {
+  padding: rem(10px);
+}
+
+.bottom {
+  flex-shrink: 0;
+  height: rem(40px);
+  padding: rem(5px);
+  border-top: rem(1px) solid light-dark(#ddd, #5f6368);
+}

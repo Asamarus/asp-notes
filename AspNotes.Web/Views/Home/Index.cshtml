@@ -3,28 +3,30 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#fff">
 
     <title>@ViewData["Title"]</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
 
     <link rel="shortcut icon" type="image/x-icon" href="/favicon/main.png">
-    <link rel="stylesheet" href="~/assets/index-CGL5BCGM.css" data-id="main-css">
+    <link rel="stylesheet" href="~/assets/index-C8S6rbPD.css" data-id="main-css">
 </head>
 
 <body>
 
     <div id="root"></div>
-    <script type="module" src="~/assets/index-Dvre4pX-.js" data-id="main-js" defer></script>
+    <script>
+        window.__PRELOADED_STATE__ = @Html.Raw(Json.Serialize(ViewData["PreloadedState"]));
+    </script>
+    <script type="module" src="~/assets/index-TDhz-AwB.js" data-id="main-js" defer></script>
 
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
+                }, function (err) {
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });

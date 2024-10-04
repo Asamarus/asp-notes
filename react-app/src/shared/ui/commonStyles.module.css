@@ -1,0 +1,26 @@
+.active-element {
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.modal-opened {
+  margin-right: var(--removed-body-scroll-bar-size) !important;
+}
+
+.clickable-text {
+  font-size: rem(16px);
+  color: light-dark(#0b78ee, #e8eaed);
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover {
+    color: light-dark(#23527c, #e8eaed);
+    text-decoration: underline;
+    outline: 0;
+  }
+}
+
+.action-icon {
+  color: light-dark(#333, #c1c2c5);
+}

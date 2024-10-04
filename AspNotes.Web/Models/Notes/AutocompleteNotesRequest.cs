@@ -9,4 +9,6 @@ public class AutocompleteNotesRequest
     public string SearchTerm { get; set; } = null!;
 
     public string? Section { get; set; }
+
+    public string? Book { get; set; }
 }

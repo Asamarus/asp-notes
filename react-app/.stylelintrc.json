@@ -11,6 +11,8 @@
         "ignoreProperties": ["text-rendering"]
       }
     ],
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "media-feature-range-notation": null,
+    "hue-degree-notation": null
   }
 }

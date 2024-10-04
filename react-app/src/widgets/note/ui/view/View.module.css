@@ -1,0 +1,43 @@
+.title {
+  font-weight: bold;
+  font-size: rem(24px);
+  margin-bottom: rem(10px);
+}
+
+.content {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: rem(18px);
+  line-height: 150%;
+  overflow-x: auto;
+
+  code {
+    background-color: hsla(0, 0%, 78%, 0.3);
+  }
+
+  table {
+    border: 1px double #b3b3b3;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    max-width: 100%;
+
+    th {
+      border: 1px solid #bfbfbf;
+      min-width: 2em;
+      padding: 0.4em;
+      background: rgba(0, 0, 0, 0.05);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    td {
+      border: 1px solid #bfbfbf;
+      min-width: 2em;
+      padding: 0.4em;
+    }
+  }
+}
+
+.code {
+  font-size: rem(13px);
+}

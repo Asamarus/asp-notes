@@ -3,14 +3,52 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + React + TS</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon/main.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#fff">
+  <title>Notes</title>
 </head>
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <script>
+    window.__PRELOADED_STATE__ = {
+      sections: {
+        allNotesSection: {
+          name: 'all',
+          displayName: 'Notes',
+          color: '#1e88e5',
+        },
+        list: [
+          {
+            id: 1,
+            name: 'it',
+            displayName: 'IT',
+            color: '#f9a825',
+          },
+          {
+            id: 2,
+            name: 'dot_net',
+            displayName: '.Net',
+            color: '#607d8b',
+          },
+          {
+            id: 3,
+            name: 'front_end',
+            displayName: 'Front-end',
+            color: '#4caf50',
+          },
+          {
+            id: 4,
+            name: 'database',
+            displayName: 'Database',
+            color: '#44bdb9',
+          },
+        ]
+      }
+    };
+  </script>
+  <script type="module" src="/src/app/index.tsx"></script>
 </body>
 
 </html>

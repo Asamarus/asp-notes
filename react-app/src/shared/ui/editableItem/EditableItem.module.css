@@ -1,0 +1,27 @@
+.wrapper {
+  padding-bottom: rem(20px);
+}
+
+.drag-icon {
+  position: relative;
+  top: rem(4px);
+  user-select: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  border-radius: rem(10px);
+  padding: rem(10px) rem(20px);
+  gap: rem(20px);
+  background-color: light-dark(#fff, #202124);
+  border: rem(1px) solid light-dark(#ccc, #373a40);
+}
+
+.content {
+  flex: 1 1 0;
+}
+
+.icon {
+  color: light-dark(#333, #c1c2c5);
+}

@@ -1,4 +1,4 @@
-import { STORAGE_EVENT } from '@/hooks/useCrossTabEventListener/useCrossTabEventListener'
+import { STORAGE_EVENT } from '@/shared/lib/useCrossTabEventListener'
 import { fireEvent } from '@test-utils'
 
 export function dispatchStorageEvent(eventName: string, payload: unknown): void {

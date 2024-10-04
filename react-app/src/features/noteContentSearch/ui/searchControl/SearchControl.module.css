@@ -1,0 +1,4 @@
+.mark {
+  background-color: light-dark(#ffec99, #fcc419);
+  color: light-dark(inherit, #101113);
+}

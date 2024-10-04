@@ -51,11 +51,13 @@ public class NotesDbContext(DbContextOptions<NotesDbContext> options) : DbContex
 
         foreach (var entityEntry in entities)
         {
-            ((EntityBase)entityEntry.Entity).UpdatedAt = DateTime.Now;
+            var now = DateTime.Now;
+            var truncatedNow = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
+            ((EntityBase)entityEntry.Entity).UpdatedAt = truncatedNow;
 
             if (entityEntry.State == EntityState.Added)
             {
-                ((EntityBase)entityEntry.Entity).CreatedAt = DateTime.Now;
+                ((EntityBase)entityEntry.Entity).CreatedAt = truncatedNow;
             }
         }
     }

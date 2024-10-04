@@ -1,7 +1,0 @@
-export * as accountsMocks from './accounts'
-export * as applicationMocks from './application'
-export * as sectionsMocks from './sections'
-export * as notesMocks from './notes'
-export * as booksMocks from './books'
-export * as tagsMocks from './tags'
-export * as sourcesMocks from './sources'

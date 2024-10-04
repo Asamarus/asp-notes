@@ -9,8 +9,5 @@ export default mergeConfig(
       environment: 'jsdom',
       setupFiles: './vitest.setup.mjs',
     },
-    build: {
-      minify: 'terser',
-    },
   }),
 )

@@ -44,3 +44,6 @@ _ReSharper*/
 
 # Vite build
 **/wwwroot/**/assets/
+
+# Node.js modules
+**/node_modules/

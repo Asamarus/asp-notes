@@ -242,6 +242,16 @@ public static partial class SearchHelper
     }
 
     /// <summary>
+    /// Escapes special characters in FTS5 keywords.
+    /// </summary>
+    /// <param name="keyword">The keyword to escape.</param>
+    /// <returns>The escaped keyword.</returns>
+    private static string EscapeFts5Keyword(string keyword)
+    {
+        return "\"" + keyword.Replace("\"", "\"\"") + "\"";
+    }
+
+    /// <summary>
     /// Adds a full-text search condition to the provided query using the specified keywords.
     /// </summary>
     /// <param name="query">The query to which the full-text search condition will be added.</param>
@@ -249,11 +259,14 @@ public static partial class SearchHelper
     /// <param name="searchKeyWords">A set of keywords that will be used in the full-text search condition.</param>
     private static void AddFullTextSearch(this Query query, SearchHelperFullTextSearchRequest request, HashSet<string> searchKeyWords)
     {
-        var ftsQuery = new Query(request.FtsTableName)
-            .Select("rowid", "rank")
-            .WhereRaw($"{request.FtsTableName} MATCH ?", string.Join(" OR ", searchKeyWords));
+        // Helper function to escape special characters in FTS5
+        var escapedKeywords = searchKeyWords.Select(EscapeFts5Keyword);
 
-        query.Join(ftsQuery.As("fts"), j => j.On($"{request.MainContentTableName}.{request.MainContentTablePrimaryKey}", "fts.rowid"));
+        var ftsQuery = new Query(request.FtsTableName)
+            .Select("Id", "rank")
+            .WhereRaw($"{request.FtsTableName} MATCH ?", string.Join(" OR ", escapedKeywords));
+
+        query.Join(ftsQuery.As("fts"), j => j.On($"{request.MainContentTableName}.{request.MainContentTablePrimaryKey}", "fts.Id"));
 
         query.OrderBy("fts.rank");
     }

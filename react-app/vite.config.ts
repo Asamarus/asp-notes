@@ -16,4 +16,8 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    minify: 'terser',
+    chunkSizeWarningLimit: 1024,
+  },
 })

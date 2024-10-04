@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: rem(5px);
+}
+
+.divider {
+  flex: 1 1 rem(5px);
+}

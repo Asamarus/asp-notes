@@ -172,32 +172,6 @@
         ]
       }
     },
-    "/api/application/getInitialData": {
-      "post": {
-        "tags": [
-          "Application"
-        ],
-        "summary": "Retrieves the initial data for the application",
-        "description": "Returns a response containing the title and some data",
-        "responses": {
-          "200": {
-            "description": "Initial data retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InitialDataResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
     "/api/books/getList": {
       "post": {
         "tags": [
@@ -1462,24 +1436,6 @@
         },
         "additionalProperties": false
       },
-      "AllNotesSection": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "color": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "AutoCompleteNotesItemResponse": {
         "required": [
           "id",
@@ -1526,6 +1482,10 @@
             "type": "string"
           },
           "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "book": {
             "type": "string",
             "nullable": true
           }
@@ -1646,8 +1606,8 @@
         "properties": {
           "name": {
             "maxLength": 20,
-            "minLength": 4,
-            "pattern": "^[a-z]+$",
+            "minLength": 2,
+            "pattern": "^[a-z0-9_]+$",
             "type": "string"
           },
           "displayName": {
@@ -1763,15 +1723,6 @@
           "section": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "InitialDataResponse": {
-        "type": "object",
-        "properties": {
-          "allNotesSection": {
-            "$ref": "#/components/schemas/AllNotesSection"
           }
         },
         "additionalProperties": false
@@ -2118,6 +2069,9 @@
             "type": "string",
             "nullable": true
           },
+          "showNotification": {
+            "type": "boolean"
+          },
           "sections": {
             "type": "array",
             "items": {
@@ -2166,6 +2120,9 @@
           "message": {
             "type": "string",
             "nullable": true
+          },
+          "showNotification": {
+            "type": "boolean"
           },
           "sources": {
             "type": "array",

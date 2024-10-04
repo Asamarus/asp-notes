@@ -51,6 +51,7 @@ public class SectionsController(ISectionsService sectionsService) : ControllerBa
         var response = new SectionsResponse
         {
             Message = "Section is created successfully!",
+            ShowNotification = true,
             Sections = sections.Select(x => new SectionItemResponse(x)).ToList()
         };
 
@@ -80,6 +81,7 @@ public class SectionsController(ISectionsService sectionsService) : ControllerBa
         var response = new SectionsResponse
         {
             Message = "Section is updated successfully!",
+            ShowNotification = true,
             Sections = sections.Select(x => new SectionItemResponse(x)).ToList()
         };
 
@@ -109,6 +111,7 @@ public class SectionsController(ISectionsService sectionsService) : ControllerBa
         var response = new SectionsResponse
         {
             Message = "Section is deleted successfully!",
+            ShowNotification = true,
             Sections = sections.Select(x => new SectionItemResponse(x)).ToList()
         };
 
@@ -135,6 +138,7 @@ public class SectionsController(ISectionsService sectionsService) : ControllerBa
         var response = new SectionsResponse
         {
             Message = "Sections are reordered successfully!",
+            ShowNotification = true,
             Sections = sections.Select(x => new SectionItemResponse(x)).ToList()
         };
 

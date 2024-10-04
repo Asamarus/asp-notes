@@ -219,6 +219,7 @@ public class NotesServiceTests : DatabaseTestBase
         {
             Title = "Note title",
             Content = searchTerm,
+            ContentSearchIndex = searchTerm,
             Section = "section1",
         };
 
@@ -228,6 +229,7 @@ public class NotesServiceTests : DatabaseTestBase
         {
             Title = "Note title",
             Content = "Some text",
+            ContentSearchIndex = "Some text",
             Section = "section2",
         };
 
@@ -518,6 +520,86 @@ public class NotesServiceTests : DatabaseTestBase
 
         // Act
         var result = await _notesService.Autocomplete(searchTerm, section);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("Note 1", result.First().Title);
+    }
+
+    [Fact]
+    public async Task Autocomplete_ReturnsSuggestionsFilteredByBook_WhenBookIsSpecified()
+    {
+        // Arrange
+        var searchTerm = "Note";
+        var book = "book1";
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
+        {
+            Title = "Note 1",
+            TitleSearchIndex = SearchHelper.GetSearchIndex("Note 1"),
+            Content = "Content 1",
+            Book = book,
+            Section = "section1"
+        });
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
+        {
+            Title = "Note 2",
+            TitleSearchIndex = SearchHelper.GetSearchIndex("Note 2"),
+            Content = "Content 2",
+            Book = "book2",
+            Section = "section1"
+        });
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
+        // Act
+        var result = await _notesService.Autocomplete(searchTerm, book: book);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("Note 1", result.First().Title);
+    }
+
+    [Fact]
+    public async Task Autocomplete_ReturnsSuggestionsFilteredBySectionAndBook_WhenBothAreSpecified()
+    {
+        // Arrange
+        var searchTerm = "Note";
+        var section = "section1";
+        var book = "book1";
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
+        {
+            Title = "Note 1",
+            TitleSearchIndex = SearchHelper.GetSearchIndex("Note 1"),
+            Content = "Content 1",
+            Section = section,
+            Book = book
+        });
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
+        {
+            Title = "Note 2",
+            TitleSearchIndex = SearchHelper.GetSearchIndex("Note 2"),
+            Content = "Content 2",
+            Section = section,
+            Book = "book2"
+        });
+
+        DbFixture.DbContext.Notes.Add(new NoteEntity
+        {
+            Title = "Note 3",
+            TitleSearchIndex = SearchHelper.GetSearchIndex("Note 3"),
+            Content = "Content 3",
+            Section = "section2",
+            Book = book
+        });
+
+        await DbFixture.DbContext.SaveChangesAsync();
+
+        // Act
+        var result = await _notesService.Autocomplete(searchTerm, section, book);
 
         // Assert
         Assert.Single(result);

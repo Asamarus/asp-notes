@@ -1,0 +1,17 @@
+.no-scroll {
+  overflow: hidden;
+}
+
+.note-editor.fullscreen-mode {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background: var(--ck-color-base-background);
+}
+
+.note-editor.fullscreen-mode .note-editor-content {
+  overflow-y: auto;
+  height: 100%;
+}

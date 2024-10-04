@@ -5,8 +5,8 @@ namespace AspNotes.Web.Models.Sections;
 public class CreateSectionRequest
 {
     [Required]
-    [StringLength(20, MinimumLength = 4)]
-    [RegularExpression(@"^[a-z]+$", ErrorMessage = "Name must contain only Latin letters and no whitespaces!")]
+    [StringLength(20, MinimumLength = 2)]
+    [RegularExpression(@"^[a-z0-9_]+$", ErrorMessage = "Name must contain only lowercase Latin letters, numbers, underscores and no whitespaces!")]
     public string Name { get; set; } = null!;
 
     [Required]

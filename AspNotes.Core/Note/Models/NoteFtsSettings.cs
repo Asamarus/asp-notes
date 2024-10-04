@@ -12,7 +12,7 @@ public class NoteFtsSettings
 
     public static readonly string MainContentTableName = "n";
 
-    public static readonly string FtsPrimaryKey = "rowid";
+    public static readonly string FtsPrimaryKey = "Id";
 
     public static readonly string MainContentTablePrimaryKey = "Id";
 }

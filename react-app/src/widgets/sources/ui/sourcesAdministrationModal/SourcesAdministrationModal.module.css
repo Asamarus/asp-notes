@@ -1,0 +1,12 @@
+.wrapper {
+  position: relative;
+}
+
+.content {
+  padding: rem(10px);
+}
+
+.link {
+  word-break: break-word;
+  color: var(--mantine-color-anchor) !important;
+}

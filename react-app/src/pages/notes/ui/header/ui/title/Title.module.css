@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 rem(10px);
+
+  @media (max-width: 1023px) {
+    margin-right: rem(30px);
+  }
+}
+
+.title {
+  color: light-dark(#fff, #e9ecef);
+  font-size: rem(16px);
+  font-weight: 500;
+}

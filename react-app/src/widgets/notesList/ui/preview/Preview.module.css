@@ -1,0 +1,11 @@
+.title {
+  word-wrap: break-word;
+  font-weight: bold;
+  font-size: rem(18px);
+  margin-bottom: rem(10px);
+}
+
+.content {
+  word-wrap: break-word;
+  line-height: 1.4286;
+}

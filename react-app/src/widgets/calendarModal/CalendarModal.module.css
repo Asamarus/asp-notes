@@ -1,0 +1,10 @@
+.day {
+  width: rem(36px);
+  height: rem(36px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  color: var(--mantine-color-text);
+}

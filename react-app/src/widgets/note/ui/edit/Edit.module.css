@@ -1,0 +1,11 @@
+.editor {
+  overflow-y: auto;
+}
+
+div[data-display-type='page'] .editor {
+  height: calc(100vh - rem(50px) - rem(40px) - rem(70px) - rem(160px));
+}
+
+div[data-display-type='modal'] .editor {
+  height: calc(100vh - 10dvh - rem(40px) - rem(70px) - rem(160px));
+}
