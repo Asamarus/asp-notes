@@ -80,7 +80,6 @@ public class SourcesController(INotesService notesService, IUrlMetadataHelper ur
         source.Link = request.Link;
         source.Title = request.Title;
         source.Description = request.Description;
-        source.Image = request.Image;
         source.ShowImage = request.ShowImage;
 
         var updatedNote = await notesService.UpdateNoteSources(request.NoteId, note.Sources);

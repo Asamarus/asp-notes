@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AspNotes.Web.Common.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspNotes.Web.Models.Sources;
 
@@ -9,6 +10,6 @@ public class RemoveNoteSourceRequest
     public long NoteId { get; set; }
 
     [Required]
-    [RegularExpression(@"\S", ErrorMessage = "SourceId must not be empty or whitespace.")]
+    [NotEmptyOrWhitespace]
     public string SourceId { get; set; } = null!;
 }

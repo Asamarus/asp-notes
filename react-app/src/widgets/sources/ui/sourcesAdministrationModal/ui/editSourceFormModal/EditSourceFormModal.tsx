@@ -56,6 +56,7 @@ function EditSourceFormModal({ noteId, source }: EditSourceFormModalProps) {
             noteId,
             sourceId: source.id,
             link: formData.link,
+            title: formData.title,
             description: formData.description,
             showImage: formData.showImage,
           },
