@@ -1896,7 +1896,6 @@
           },
           "sourceId": {
             "minLength": 1,
-            "pattern": "\\S",
             "type": "string"
           }
         },
@@ -2239,7 +2238,6 @@
           },
           "sourceId": {
             "minLength": 1,
-            "pattern": "\\S",
             "type": "string"
           },
           "link": {
