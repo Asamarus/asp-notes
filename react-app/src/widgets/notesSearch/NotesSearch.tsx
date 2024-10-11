@@ -7,6 +7,7 @@ import { notesApi, setFilters } from '@/entities/note'
 import store from '@/shared/lib/store'
 import { openNoteModal } from '@/widgets/noteModal'
 import getCurrentSection from '@/shared/model/getCurrentSection'
+import { useDocumentVisibility } from '@mantine/hooks'
 
 import { CloseButton, Combobox, TextInput, Loader, ScrollArea } from '@mantine/core'
 import { MdSearch } from 'react-icons/md'
@@ -46,6 +47,8 @@ function NotesSearch() {
   const [value, setValue] = useState('')
   const [options, setOptions] = useState<Options>({ notes: [], books: [], tags: [] })
   const ignoreAutoCompleteRef = useRef(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const documentState = useDocumentVisibility()
 
   const autoComplete = (searchTerm: string) => {
     if (ignoreAutoCompleteRef.current || searchTerm.length < 2) return
@@ -103,6 +106,16 @@ function NotesSearch() {
     }
   })
 
+  useEffect(() => {
+    if (
+      documentState === 'hidden' &&
+      inputRef.current &&
+      inputRef.current === document.activeElement
+    ) {
+      inputRef.current?.blur()
+    }
+  }, [documentState])
+
   const hasOptions = options.notes.length > 0 || options.books.length > 0 || options.tags.length > 0
 
   return (
@@ -116,6 +129,7 @@ function NotesSearch() {
     >
       <Combobox.Target>
         <TextInput
+          ref={inputRef}
           placeholder="Search"
           value={value}
           onChange={(event) => {
