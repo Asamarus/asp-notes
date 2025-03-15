@@ -3,27 +3,27 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as sectionsMocks from './sectionsApiMockData'
 
 export const handlers = [
-  http.post('/api/sections/getList', async () => {
+  http.get('/api/sections', async () => {
     await mswDelay()
     return HttpResponse.json(sectionsMocks.getSectionsListResponseMock)
   }),
 
-  http.post('/api/sections/create', async () => {
+  http.post('/api/sections', async () => {
     await mswDelay()
     return HttpResponse.json(sectionsMocks.createSectionResponseMock)
   }),
 
-  http.post('/api/sections/update', async () => {
+  http.put('/api/sections/1', async () => {
     await mswDelay()
     return HttpResponse.json(sectionsMocks.updateSectionResponseMock)
   }),
 
-  http.post('/api/sections/delete', async () => {
+  http.delete('/api/sections/1', async () => {
     await mswDelay()
     return HttpResponse.json(sectionsMocks.deleteSectionResponseMock)
   }),
 
-  http.post('/api/sections/reorder', async () => {
+  http.put('/api/sections/reorder', async () => {
     await mswDelay()
     return HttpResponse.json(sectionsMocks.reorderSectionsResponseMock)
   }),

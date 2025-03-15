@@ -1,8 +1,9 @@
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from '@mantine/form'
 import { sectionsApi } from '@/entities/section'
 import useFetch from '@/shared/lib/useFetch'
 import { closeSectionFormModal } from '.'
 import setSections from '../model/setSections'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import { Fieldset, ColorInput, TextInput, Button, Group } from '@mantine/core'
 
@@ -13,15 +14,13 @@ export interface SectionFormModalProps {
   section?: Section
 }
 
-type Inputs = {
-  name: string
-  displayName: string
-  color: string
-}
 const nameValidationRegex = /^[a-z0-9_]+$/
 const nameValidation = (value: string) =>
-  nameValidationRegex.test(value) ||
-  'Name must contain only lowercase Latin letters, numbers, underscores and no whitespaces!'
+  !value
+    ? 'Name is required!'
+    : !nameValidationRegex.test(value)
+    ? 'Name must contain only lowercase Latin letters, numbers, underscores and no whitespaces!'
+    : null
 
 function SectionFormModal({ section }: SectionFormModalProps) {
   const { request: createSectionRequest, isLoading: isCreateSectionLoading } = useFetch(
@@ -33,51 +32,56 @@ function SectionFormModal({ section }: SectionFormModalProps) {
 
   const isLoading = section ? isUpdateSectionLoading : isCreateSectionLoading
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: {
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
       name: section?.name || '',
       displayName: section?.displayName || '',
       color: section?.color || '',
+    },
+    validate: {
+      name: nameValidation,
+      displayName: (value) => (!value ? 'Display name is required!' : null),
+      color: (value) => (!value ? 'Color is required!' : null),
     },
   })
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
+      onSubmit={form.onSubmit((values) => {
         if (section) {
           updateSectionRequest(
             {
               id: section.id,
-              displayName: data.displayName,
-              color: data.color,
+              request: {
+                displayName: values.displayName,
+                color: values.color,
+              },
             },
             ({ data }) => {
               if (data) {
-                const payload = data?.sections ?? []
+                const payload = data ?? []
 
                 setSections(payload)
                 closeSectionFormModal()
+                showSuccess('Section is updated!')
               }
             },
           )
         } else {
           createSectionRequest(
             {
-              name: data.name,
-              displayName: data.displayName,
-              color: data.color,
+              name: values.name,
+              displayName: values.displayName,
+              color: values.color,
             },
             ({ data }) => {
               if (data) {
-                const payload = data?.sections ?? []
+                const payload = data ?? []
 
                 setSections(payload)
                 closeSectionFormModal()
+                showSuccess('Section is created!')
               }
             },
           )
@@ -92,34 +96,20 @@ function SectionFormModal({ section }: SectionFormModalProps) {
           withAsterisk
           label="Name"
           disabled={!!section}
-          {...register('name', {
-            required: 'Name is required',
-            validate: nameValidation,
-          })}
-          error={errors.name && errors.name.message}
+          key={form.key('name')}
+          {...form.getInputProps('name')}
         />
         <TextInput
           withAsterisk
           label="Display name"
-          {...register('displayName', {
-            required: 'Display name is required',
-          })}
-          error={errors.displayName && errors.displayName.message}
+          key={form.key('displayName')}
+          {...form.getInputProps('displayName')}
         />
-        <Controller
-          name="color"
-          control={control}
-          rules={{
-            required: 'Color is required',
-          }}
-          render={({ field }) => (
-            <ColorInput
-              withAsterisk
-              label="Color"
-              {...field}
-              error={errors.color && errors.color.message}
-            />
-          )}
+        <ColorInput
+          withAsterisk
+          label="Color"
+          key={form.key('color')}
+          {...form.getInputProps('color')}
         />
         <Group
           justify="flex-end"

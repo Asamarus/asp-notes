@@ -1,4 +1,3 @@
-export interface User {
-  id: string
-  email: string
-}
+import { components } from '@/shared/api'
+
+export type User = components['schemas']['UsersCurrentUserResponse']

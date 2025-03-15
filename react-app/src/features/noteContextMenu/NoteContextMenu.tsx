@@ -11,8 +11,14 @@ export interface NoteContextMenuProps {
   id: number
   changeNoteTab: (tab: 'view' | 'edit' | 'delete') => void
   isNotSaved?: boolean
+  closeNoteModal?: () => void
 }
-function NoteContextMenu({ id, changeNoteTab, isNotSaved = false }: NoteContextMenuProps) {
+function NoteContextMenu({
+  id,
+  changeNoteTab,
+  isNotSaved = false,
+  closeNoteModal,
+}: NoteContextMenuProps) {
   return (
     <ContextMenu
       onViewClick={() => {
@@ -31,7 +37,7 @@ function NoteContextMenu({ id, changeNoteTab, isNotSaved = false }: NoteContextM
         openBooksModal(id)
       }}
       onChangeSectionClick={() => {
-        openChangeSectionModal(id)
+        openChangeSectionModal(id, closeNoteModal)
       }}
       onEditTagsClick={() => {
         openTagsModal(id)

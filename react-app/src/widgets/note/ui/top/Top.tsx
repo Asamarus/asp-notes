@@ -27,6 +27,7 @@ function Top({ id, onClose, setCurrentTab, displayType }: TopProps) {
         changeNoteTab={(tab) => {
           setCurrentTab(tab)
         }}
+        closeNoteModal={displayType === 'modal' ? onClose : undefined}
       />
       {displayType === 'modal' && (
         <CloseButton

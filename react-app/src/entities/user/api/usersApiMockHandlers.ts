@@ -3,12 +3,12 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as usersMocks from './usersApiMockData'
 
 export const handlers = [
-  http.post('/api/accounts/login', async () => {
+  http.post('/api/users/login', async () => {
     await mswDelay()
     return HttpResponse.json(usersMocks.loginResponseMock)
   }),
 
-  http.post('/api/accounts/getUser', async () => {
+  http.get('/api/users', async () => {
     // return new HttpResponse(null, {
     //   status: 401,
     //   statusText: 'unauthorized',
@@ -20,11 +20,11 @@ export const handlers = [
 
   http.post('/api/accounts/logout', async () => {
     await mswDelay()
-    return HttpResponse.json(usersMocks.logoutResponseMock)
+    return new HttpResponse(null, { status: 204 })
   }),
 
-  http.post('/api/accounts/changePassword', async () => {
+  http.put('/api/users/password', async () => {
     await mswDelay()
-    return HttpResponse.json(usersMocks.changePasswordResponseMock)
+    return new HttpResponse(null, { status: 204 })
   }),
 ]

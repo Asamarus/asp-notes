@@ -11,7 +11,7 @@
   overflow-x: auto;
 
   code {
-    background-color: hsla(0, 0%, 78%, 0.3);
+    background-color: rgba(199, 199, 199, 0.3);
   }
 
   table {

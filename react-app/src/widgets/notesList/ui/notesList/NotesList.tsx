@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import useFetch from '@/shared/lib/useFetch'
 import useAppSelector from '@/shared/lib/useAppSelector'
-import {
-  notesApi,
-  getNoteFromResponse,
-  setMetaData,
-  setNotes,
-  appendNotes,
-  reset,
-  setIds,
-} from '@/entities/note'
+import { notesApi, setMetaData, setNotes, appendNotes, reset, setIds } from '@/entities/note'
 import store from '@/shared/lib/store'
 import { useWindowEvent, useDebouncedCallback } from '@mantine/hooks'
 import { useNavigationType, useSearchParams } from 'react-router-dom'
@@ -22,7 +14,7 @@ import NotesMasonry from '../notesMasonry'
 import Loading from '@/shared/ui/loading'
 import { Center, Button } from '@mantine/core'
 
-import type { components } from '@/shared/api'
+import type { paths } from '@/shared/api'
 import useCustomEventListener from '@/shared/lib/useCustomEventListener'
 import { events } from '@/shared/config'
 
@@ -41,45 +33,45 @@ function NotesList() {
       const allNotesSectionName = store.getState().sections.allNotesSection.name
       const section = store.getState().sections.current?.name
       const filters = store.getState().notes.filters
-      const searchParams: components['schemas']['SearchNotesRequest'] = {
-        page,
+      const searchParams: paths['/api/notes']['get']['parameters']['query'] = {
+        Page: page,
       }
 
       if (filters.book) {
-        searchParams.book = filters.book
+        searchParams.Book = filters.book
       }
 
       if (filters.tags.length > 0) {
-        searchParams.tags = [...filters.tags]
+        searchParams.Tags = [...filters.tags]
       }
 
       if (filters.fromDate) {
-        searchParams.fromDate = filters.fromDate
+        searchParams.FromDate = filters.fromDate
       }
 
       if (filters.toDate) {
-        searchParams.toDate = filters.toDate
+        searchParams.ToDate = filters.toDate
       }
 
       if (filters.searchTerm.length > 2) {
-        searchParams.searchTerm = filters.searchTerm
+        searchParams.SearchTerm = filters.searchTerm
       }
 
       if (filters.inRandomOrder) {
-        searchParams.inRandomOrder = filters.inRandomOrder
+        searchParams.InRandomOrder = filters.inRandomOrder
       }
 
       if (filters.withoutBook) {
-        searchParams.withoutBook = filters.withoutBook
+        searchParams.WithoutBook = filters.withoutBook
       }
 
       if (filters.withoutTags) {
-        searchParams.withoutTags = filters.withoutTags
+        searchParams.WithoutTags = filters.withoutTags
       }
 
-      searchParams.page = page
+      searchParams.Page = page
       if (section && section !== allNotesSectionName) {
-        searchParams.section = section
+        searchParams.Section = section
       }
 
       if (page === 1 && store.getState().notes.ids.length > 0) {
@@ -88,7 +80,7 @@ function NotesList() {
 
       request(searchParams, ({ data }) => {
         if (data) {
-          const notes = data.notes?.map(getNoteFromResponse) ?? []
+          const notes = data.data ?? []
 
           if (page === 1) {
             store.dispatch(setNotes(notes))
@@ -167,7 +159,7 @@ function NotesList() {
 
   return (
     <>
-      <NotesMasonry />
+      {hasNotes && <NotesMasonry />}
       {!hasNotes && isLoading && <Loading full />}
       {hasNotes && canLoadMore && (
         <Center>

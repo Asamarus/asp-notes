@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.9.34902.65
+VisualStudioVersion = 17.12.35514.174 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNotes.Core", "AspNotes.Core\AspNotes.Core.csproj", "{F9824926-F6C9-473B-AA24-6941A8444181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNotes", "AspNotes\AspNotes.csproj", "{50CAA7E6-7761-440A-AED1-0996DD4D8A34}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNotes.Web", "AspNotes.Web\AspNotes.Web.csproj", "{318383A6-963E-4E4E-AC01-0D64C556F870}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNotes.Core.Tests", "AspNotes.Core.Tests\AspNotes.Core.Tests.csproj", "{E40296F6-0B01-4773-871E-3990829B5C0B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNotes.Web.Tests", "AspNotes.Web.Tests\AspNotes.Web.Tests.csproj", "{8DEFA0F7-DE25-4FBC-A7C4-D314015D23F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNotes.Tests", "AspNotes.Tests\AspNotes.Tests.csproj", "{30E67AD8-B212-42A3-8ED1-B69D1E301450}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,27 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F9824926-F6C9-473B-AA24-6941A8444181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9824926-F6C9-473B-AA24-6941A8444181}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9824926-F6C9-473B-AA24-6941A8444181}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9824926-F6C9-473B-AA24-6941A8444181}.Release|Any CPU.Build.0 = Release|Any CPU
-		{318383A6-963E-4E4E-AC01-0D64C556F870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{318383A6-963E-4E4E-AC01-0D64C556F870}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{318383A6-963E-4E4E-AC01-0D64C556F870}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{318383A6-963E-4E4E-AC01-0D64C556F870}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E40296F6-0B01-4773-871E-3990829B5C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E40296F6-0B01-4773-871E-3990829B5C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E40296F6-0B01-4773-871E-3990829B5C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E40296F6-0B01-4773-871E-3990829B5C0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DEFA0F7-DE25-4FBC-A7C4-D314015D23F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DEFA0F7-DE25-4FBC-A7C4-D314015D23F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DEFA0F7-DE25-4FBC-A7C4-D314015D23F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DEFA0F7-DE25-4FBC-A7C4-D314015D23F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50CAA7E6-7761-440A-AED1-0996DD4D8A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50CAA7E6-7761-440A-AED1-0996DD4D8A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50CAA7E6-7761-440A-AED1-0996DD4D8A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50CAA7E6-7761-440A-AED1-0996DD4D8A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30E67AD8-B212-42A3-8ED1-B69D1E301450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30E67AD8-B212-42A3-8ED1-B69D1E301450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30E67AD8-B212-42A3-8ED1-B69D1E301450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30E67AD8-B212-42A3-8ED1-B69D1E301450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4BC36BCD-1AC5-4F8B-A9B0-A4C73690866D}
 	EndGlobalSection
 EndGlobal

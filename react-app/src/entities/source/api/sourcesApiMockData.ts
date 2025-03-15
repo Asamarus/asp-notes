@@ -1,6 +1,6 @@
 import type { components } from '@/shared/api'
 
-const testSources = [
+const testSources: components['schemas']['NotesSource'][] = [
   {
     id: '1',
     title: 'Source 1',
@@ -17,51 +17,49 @@ const testSources = [
   },
 ]
 
-export const addNoteSourceRequestMock: components['schemas']['AddNoteSourceRequest'] = {
+export const addNoteSourceRequestMock: {
+  noteId: number
+  request: components['schemas']['NotesSourceCreateRequest']
+} = {
   noteId: 1,
-  link: 'https://example.com',
+  request: {
+    link: 'https://example.com',
+  },
 }
 
-export const addNoteSourceResponseMock: components['schemas']['SourcesResponse'] = {
-  message: 'New note source is created successfully!',
-  showNotification: true,
-  sources: testSources,
-}
+export const addNoteSourceResponseMock = testSources
 
-export const updateNoteSourceRequestMock: components['schemas']['UpdateNoteSourceRequest'] = {
-  noteId: 1,
-  sourceId: '1',
-  link: 'https://example.com',
-  title: 'Source 1',
-  description: 'Source 1 description',
-  image: 'https://example.com/image.jpg',
-  showImage: false,
-}
-
-export const updateNoteSourceResponseMock: components['schemas']['SourcesResponse'] = {
-  message: 'New note source is updated successfully!',
-  showNotification: true,
-  sources: testSources,
-}
-
-export const removeNoteSourceRequestMock: components['schemas']['RemoveNoteSourceRequest'] = {
+export const updateNoteSourceRequestMock: {
+  noteId: number
+  sourceId: string
+  request: components['schemas']['NotesSourceUpdateRequest']
+} = {
   noteId: 1,
   sourceId: '1',
+  request: {
+    link: 'https://example.com',
+    title: 'Source 1',
+    description: 'Source 1 description',
+    image: 'https://example.com/image.jpg',
+    showImage: false,
+  },
 }
 
-export const removeNoteSourceResponseMock: components['schemas']['SourcesResponse'] = {
-  message: 'Note source is removed successfully!',
-  showNotification: true,
-  sources: testSources,
-}
+export const updateNoteSourceResponseMock = testSources
 
-export const reorderNoteSourcesRequestMock: components['schemas']['ReorderNoteSourcesRequest'] = {
+export const removeNoteSourceRequestMock: { noteId: number; sourceId: string } = {
   noteId: 1,
-  sourceIds: ['1', '2'],
+  sourceId: '1',
 }
 
-export const reorderNoteSourcesResponseMock: components['schemas']['SourcesResponse'] = {
-  message: 'Note sources are reordered successfully!',
-  showNotification: true,
-  sources: testSources,
+export const removeNoteSourceResponseMock = testSources
+
+export const reorderNoteSourcesRequestMock: {
+  noteId: number
+  request: components['schemas']['NotesSourcesReorderRequest']
+} = {
+  noteId: 1,
+  request: { sourceIds: ['1', '2'] },
 }
+
+export const reorderNoteSourcesResponseMock = testSources

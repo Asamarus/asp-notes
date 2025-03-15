@@ -5,7 +5,6 @@ import store from '@/shared/lib/store'
 import useAppSelector from '@/shared/lib/useAppSelector'
 import { setNote } from '../..'
 import noop from '@/shared/lib/noop'
-import getNoteFromResponse from '../../model/getNoteFromResponse'
 
 import Loading from '@/shared/ui/loading'
 
@@ -23,10 +22,9 @@ function NoteLoader({ id, children }: NoteLoaderProps) {
 
   useEffect(() => {
     if (store.getState().notes.collection[id]?.createdAt === undefined) {
-      getNoteRequest({ id }, ({ data }) => {
+      getNoteRequest(id, ({ data }) => {
         if (data) {
-          const note = getNoteFromResponse(data.note)
-          store.dispatch(setNote({ id: note.id, note }))
+          store.dispatch(setNote({ id: data.id, note: data }))
         }
       })
     }

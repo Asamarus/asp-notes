@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm } from '@mantine/form'
 import { usersApi } from '@/entities/user'
 import useFetch from '@/shared/lib/useFetch'
 import isEmail from '@/shared/lib/isEmail'
@@ -20,25 +20,21 @@ import {
 import { TbAt, TbLock } from 'react-icons/tb'
 import { MdAccountCircle, MdLogin } from 'react-icons/md'
 
-type Inputs = {
-  email: string
-  password: string
-}
-
 function LoginModal() {
   const { request: loginRequest, isLoading } = useFetch(usersApi.login)
 
   const { colorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: {
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
       email: '',
       password: '',
+    },
+    validate: {
+      email: (value) => (!isEmail(value) ? 'Invalid email' : null),
+      password: (value) => (value.length < 6 ? 'Minimum password length is 6' : null),
     },
   })
 
@@ -60,7 +56,7 @@ function LoginModal() {
         </Title>
       </Group>
       <form
-        onSubmit={handleSubmit((data) => {
+        onSubmit={form.onSubmit((data) => {
           loginRequest({ email: data.email, password: data.password }, ({ data }) => {
             if (data) {
               const user = {
@@ -83,21 +79,15 @@ function LoginModal() {
             withAsterisk
             label="Email"
             leftSection={<TbAt size={16} />}
-            {...register('email', {
-              required: 'Email is required',
-              validate: (value) => isEmail(value) || 'Invalid email',
-            })}
-            error={errors.email && errors.email.message}
+            key={form.key('email')}
+            {...form.getInputProps('email')}
           />
           <PasswordInput
             withAsterisk
             label="Password"
             leftSection={<TbLock size={16} />}
-            {...register('password', {
-              required: 'Current password is required',
-              validate: (value) => value.length >= 6 || 'Minimum password length is 6',
-            })}
-            error={errors.password && errors.password.message}
+            key={form.key('password')}
+            {...form.getInputProps('password')}
           />
 
           <Button

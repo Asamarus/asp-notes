@@ -1,19 +1,14 @@
 {
   "name": "end-to-end-tests",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "npx playwright test",
-    "ui": "npx playwright test --ui",
-    "codegen": "npx playwright codegen",
-    "reports": "npx playwright show-report"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.43.0",
-    "@types/node": "^20.12.7"
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.12.0"
   }
 }

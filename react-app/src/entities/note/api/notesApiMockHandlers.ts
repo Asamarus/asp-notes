@@ -3,52 +3,37 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as notesMocks from './notesApiMockData'
 
 export const handlers = [
-  http.post('/api/notes/search', async () => {
+  http.get('/api/notes', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.searchNotesResponseMock)
   }),
 
-  http.post('/api/notes/autocomplete', async () => {
+  http.get('/api/notes/autocomplete', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.autocompleteNotesResponseMock)
   }),
 
-  http.post('/api/notes/get', async () => {
+  http.get('/api/notes/1', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.getNoteResponseMock)
   }),
 
-  http.post('/api/notes/create', async () => {
+  http.post('/api/notes', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.createNoteResponseMock)
   }),
 
-  http.post('/api/notes/update', async () => {
+  http.patch('/api/notes/1', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.updateNoteResponseMock)
   }),
 
-  http.post('/api/notes/updateBook', async () => {
+  http.delete('/api/notes/1', async () => {
     await mswDelay()
-    return HttpResponse.json(notesMocks.updateNoteBookResponseMock)
+    return new HttpResponse(null, { status: 204 })
   }),
 
-  http.post('/api/notes/updateTags', async () => {
-    await mswDelay()
-    return HttpResponse.json(notesMocks.updateNoteTagsResponseMock)
-  }),
-
-  http.post('/api/notes/updateSection', async () => {
-    await mswDelay()
-    return HttpResponse.json(notesMocks.updateNoteSectionResponseMock)
-  }),
-
-  http.post('/api/notes/delete', async () => {
-    await mswDelay()
-    return HttpResponse.json(notesMocks.deleteNoteResponseMock)
-  }),
-
-  http.post('/api/notes/getCalendarDays', async () => {
+  http.get('/api/notes/calendar', async () => {
     await mswDelay()
     return HttpResponse.json(notesMocks.getCalendarDaysResponseMock)
   }),

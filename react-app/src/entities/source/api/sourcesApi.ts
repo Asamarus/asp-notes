@@ -1,9 +1,16 @@
 ﻿import { getClient } from '@/shared/api'
 import type { components } from '@/shared/api'
 
-export async function addNoteSource(request: components['schemas']['AddNoteSourceRequest']) {
+export async function addNoteSource({
+  noteId,
+  request,
+}: {
+  noteId: number
+  request: components['schemas']['NotesSourceCreateRequest']
+}) {
   try {
-    const { data, error } = await getClient().POST('/api/sources/add', {
+    const { data, error } = await getClient().POST('/api/notes/{noteId}/sources', {
+      params: { path: { noteId } },
       body: request,
     })
     return { data, error }
@@ -13,9 +20,18 @@ export async function addNoteSource(request: components['schemas']['AddNoteSourc
   }
 }
 
-export async function updateNoteSource(request: components['schemas']['UpdateNoteSourceRequest']) {
+export async function updateNoteSource({
+  noteId,
+  sourceId,
+  request,
+}: {
+  noteId: number
+  sourceId: string
+  request: components['schemas']['NotesSourceUpdateRequest']
+}) {
   try {
-    const { data, error } = await getClient().POST('/api/sources/update', {
+    const { data, error } = await getClient().PUT('/api/notes/{noteId}/sources/{id}', {
+      params: { path: { noteId, id: sourceId } },
       body: request,
     })
     return { data, error }
@@ -25,10 +41,10 @@ export async function updateNoteSource(request: components['schemas']['UpdateNot
   }
 }
 
-export async function removeNoteSource(request: components['schemas']['RemoveNoteSourceRequest']) {
+export async function removeNoteSource({ noteId, sourceId }: { noteId: number; sourceId: string }) {
   try {
-    const { data, error } = await getClient().POST('/api/sources/remove', {
-      body: request,
+    const { data, error } = await getClient().DELETE('/api/notes/{noteId}/sources/{id}', {
+      params: { path: { noteId, id: sourceId } },
     })
     return { data, error }
   } catch (error) {
@@ -37,11 +53,16 @@ export async function removeNoteSource(request: components['schemas']['RemoveNot
   }
 }
 
-export async function reorderNoteSources(
-  request: components['schemas']['ReorderNoteSourcesRequest'],
-) {
+export async function reorderNoteSources({
+  noteId,
+  request,
+}: {
+  noteId: number
+  request: components['schemas']['NotesSourcesReorderRequest']
+}) {
   try {
-    const { data, error } = await getClient().POST('/api/sources/reorder', {
+    const { data, error } = await getClient().PUT('/api/notes/{noteId}/sources/reorder', {
+      params: { path: { noteId } },
       body: request,
     })
     return { data, error }

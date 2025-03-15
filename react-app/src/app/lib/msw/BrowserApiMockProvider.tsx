@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 
 async function enableMocking() {
-  return false
   if (process.env.NODE_ENV !== 'development') {
     return
   }

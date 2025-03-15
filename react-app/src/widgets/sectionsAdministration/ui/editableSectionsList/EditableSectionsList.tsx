@@ -7,6 +7,7 @@ import noop from '@/shared/lib/noop'
 import store from '@/shared/lib/store'
 import { openAddSectionFormModal, openEditSectionFormModal } from '../sectionFormModal'
 import setSections from '../model/setSections'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import { Button, LoadingOverlay } from '@mantine/core'
 import SortableList from '@/shared/ui/sortableList'
@@ -26,6 +27,7 @@ const handleSortEnd = (sections: Section[]) => {
 
   store.dispatch(reorderSections(ids))
   reorderSectionsRequest({ ids })
+  showSuccess('Sections are reordered!')
 }
 
 function EditableSectionsList() {
@@ -60,11 +62,12 @@ function EditableSectionsList() {
                   title: 'Delete section',
                   message: 'Are you sure you want to delete this section?',
                   onConfirm: () => {
-                    deleteSectionRequest({ id: section.id }, ({ data }) => {
+                    deleteSectionRequest(section.id, ({ data }) => {
                       if (data) {
-                        const payload = data?.sections ?? []
+                        const payload = data ?? []
 
                         setSections(payload)
+                        showSuccess('Section is deleted!')
                       }
                     })
                   },

@@ -18,7 +18,6 @@ describe('useResponsiveColumns hook', () => {
     expect(result.current.columnHeight).toBe(0)
     expect(result.current.gutter).toBe(0)
 
-    // eslint-disable-next-line testing-library/no-node-access
     const div = container.firstChild
 
     // Mock the offsetWidth and offsetHeight to simulate a resize

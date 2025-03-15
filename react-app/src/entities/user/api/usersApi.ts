@@ -1,9 +1,9 @@
 ﻿import { getClient } from '@/shared/api'
 import type { components } from '@/shared/api'
 
-export async function login(request: components['schemas']['LoginRequest']) {
+export async function login(request: components['schemas']['UsersLoginRequest']) {
   try {
-    const { data, error } = await getClient().POST('/api/accounts/login', {
+    const { data, error } = await getClient().POST('/api/users/login', {
       body: request,
     })
     return { data, error }
@@ -15,7 +15,7 @@ export async function login(request: components['schemas']['LoginRequest']) {
 
 export async function getUser() {
   try {
-    const { data, error } = await getClient().POST('/api/accounts/getUser')
+    const { data, error } = await getClient().GET('/api/users')
     return { data, error }
   } catch (error) {
     console.error('usersApi.getUser', error)
@@ -25,7 +25,7 @@ export async function getUser() {
 
 export async function logout() {
   try {
-    const { data, error } = await getClient().POST('/api/accounts/logout')
+    const { data, error } = await getClient().POST('/api/users/logout')
     return { data, error }
   } catch (error) {
     console.error('usersApi.logout', error)
@@ -33,9 +33,9 @@ export async function logout() {
   }
 }
 
-export async function changePassword(request: components['schemas']['ChangePasswordRequest']) {
+export async function changePassword(request: components['schemas']['UsersChangePasswordRequest']) {
   try {
-    const { data, error } = await getClient().POST('/api/accounts/changePassword', {
+    const { data, error } = await getClient().PUT('/api/users/password', {
       body: request,
     })
     return { data, error }

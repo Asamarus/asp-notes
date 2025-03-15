@@ -1,24 +1,8 @@
-export interface Note {
-  id: number
-  createdAt: string
-  updatedAt: string
-  title: string
-  section: string
-  content: string
-  preview: string
-  tags: string[]
-  book: string
-  sources: NoteSource[]
-}
+import { components } from '@/shared/api'
 
-export interface NoteSource {
-  id: string
-  title: string
-  link: string
-  description: string
-  image: string
-  showImage: boolean
-}
+export type Note = components['schemas']['NotesItemResponse']
+
+export type NoteSource = components['schemas']['NotesSource']
 
 export interface NotesFilters {
   searchTerm: string
@@ -39,7 +23,4 @@ export interface NotesMetadata {
   foundWholePhrase: boolean
 }
 
-export interface AutocompleteNote {
-  id: number
-  title: string
-}
+export type AutocompleteNote = components['schemas']['NotesAutocompleteResultItem']

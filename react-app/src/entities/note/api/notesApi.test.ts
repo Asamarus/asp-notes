@@ -4,9 +4,6 @@
   getNote,
   createNote,
   updateNote,
-  updateNoteBook,
-  updateNoteTags,
-  updateNoteSection,
   deleteNote,
   getCalendarDays,
 } from './notesApi'
@@ -38,24 +35,9 @@ describe('notesApi', () => {
     expect(data).toEqual(notesMocks.updateNoteResponseMock)
   })
 
-  it('updateNoteBook request test', async () => {
-    const { data } = await updateNoteBook(notesMocks.updateNoteBookRequestMock)
-    expect(data).toEqual(notesMocks.updateNoteBookResponseMock)
-  })
-
-  it('updateNoteTags request test', async () => {
-    const { data } = await updateNoteTags(notesMocks.updateNoteTagsRequestMock)
-    expect(data).toEqual(notesMocks.updateNoteTagsResponseMock)
-  })
-
-  it('updateNoteSection request test', async () => {
-    const { data } = await updateNoteSection(notesMocks.updateNoteSectionRequestMock)
-    expect(data).toEqual(notesMocks.updateNoteSectionResponseMock)
-  })
-
   it('deleteNote request test', async () => {
     const { data } = await deleteNote(notesMocks.deleteNoteRequestMock)
-    expect(data).toEqual(notesMocks.deleteNoteResponseMock)
+    expect(data).toEqual(undefined)
   })
 
   it('getCalendarDays request test', async () => {

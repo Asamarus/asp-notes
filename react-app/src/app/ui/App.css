@@ -66,6 +66,7 @@ div[data-display-type='modal'] .ck-sticky-panel__content_sticky {
 [data-name='note-content'] a {
   color: var(--mantine-color-anchor);
   text-decoration: underline;
+
   a:hover,
   a:focus,
   a:active,

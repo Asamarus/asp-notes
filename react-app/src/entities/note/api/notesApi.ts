@@ -1,10 +1,10 @@
 ﻿import { getClient } from '@/shared/api'
-import type { components } from '@/shared/api'
+import type { components, paths } from '@/shared/api'
 
-export async function searchNotes(request: components['schemas']['SearchNotesRequest']) {
+export async function searchNotes(queryParams: paths['/api/notes']['get']['parameters']['query']) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/search', {
-      body: request,
+    const { data, error } = await getClient().GET('/api/notes', {
+      params: { query: queryParams },
     })
     return { data, error }
   } catch (error) {
@@ -14,11 +14,11 @@ export async function searchNotes(request: components['schemas']['SearchNotesReq
 }
 
 export async function autocompleteNotes(
-  request: components['schemas']['AutocompleteNotesRequest'],
+  queryParams: paths['/api/notes/autocomplete']['get']['parameters']['query'],
 ) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/autocomplete', {
-      body: request,
+    const { data, error } = await getClient().GET('/api/notes/autocomplete', {
+      params: { query: queryParams },
     })
     return { data, error }
   } catch (error) {
@@ -27,10 +27,10 @@ export async function autocompleteNotes(
   }
 }
 
-export async function getNote(request: components['schemas']['GetNoteRequest']) {
+export async function getNote(id: number) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/get', {
-      body: request,
+    const { data, error } = await getClient().GET('/api/notes/{id}', {
+      params: { path: { id } },
     })
     return { data, error }
   } catch (error) {
@@ -39,9 +39,9 @@ export async function getNote(request: components['schemas']['GetNoteRequest']) 
   }
 }
 
-export async function createNote(request: components['schemas']['CreateNoteRequest']) {
+export async function createNote(request: components['schemas']['NotesCreateRequest']) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/create', {
+    const { data, error } = await getClient().POST('/api/notes', {
       body: request,
     })
     return { data, error }
@@ -51,9 +51,16 @@ export async function createNote(request: components['schemas']['CreateNoteReque
   }
 }
 
-export async function updateNote(request: components['schemas']['UpdateNoteRequest']) {
+export async function updateNote({
+  id,
+  request,
+}: {
+  id: number
+  request: components['schemas']['NotesPatchRequest']
+}) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/update', {
+    const { data, error } = await getClient().PATCH('/api/notes/{id}', {
+      params: { path: { id } },
       body: request,
     })
     return { data, error }
@@ -63,48 +70,10 @@ export async function updateNote(request: components['schemas']['UpdateNoteReque
   }
 }
 
-export async function updateNoteBook(request: components['schemas']['UpdateNoteBookRequest']) {
+export async function deleteNote(id: number) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/updateBook', {
-      body: request,
-    })
-    return { data, error }
-  } catch (error) {
-    console.error('notesApi.updateNoteBook', error)
-    return { data: null, error: null }
-  }
-}
-
-export async function updateNoteTags(request: components['schemas']['UpdateNoteTagsRequest']) {
-  try {
-    const { data, error } = await getClient().POST('/api/notes/updateTags', {
-      body: request,
-    })
-    return { data, error }
-  } catch (error) {
-    console.error('notesApi.updateNoteTags', error)
-    return { data: null, error: null }
-  }
-}
-
-export async function updateNoteSection(
-  request: components['schemas']['UpdateNoteSectionRequest'],
-) {
-  try {
-    const { data, error } = await getClient().POST('/api/notes/updateSection', {
-      body: request,
-    })
-    return { data, error }
-  } catch (error) {
-    console.error('notesApi.updateNoteSection', error)
-    return { data: null, error: null }
-  }
-}
-
-export async function deleteNote(request: components['schemas']['DeleteNoteRequest']) {
-  try {
-    const { data, error } = await getClient().POST('/api/notes/delete', {
-      body: request,
+    const { data, error } = await getClient().DELETE('/api/notes/{id}', {
+      params: { path: { id } },
     })
     return { data, error }
   } catch (error) {
@@ -114,11 +83,11 @@ export async function deleteNote(request: components['schemas']['DeleteNoteReque
 }
 
 export async function getCalendarDays(
-  request: components['schemas']['GetNoteCalendarDaysRequest'],
+  queryParams: paths['/api/notes/calendar']['get']['parameters']['query'],
 ) {
   try {
-    const { data, error } = await getClient().POST('/api/notes/getCalendarDays', {
-      body: request,
+    const { data, error } = await getClient().GET('/api/notes/calendar', {
+      params: { query: queryParams },
     })
     return { data, error }
   } catch (error) {

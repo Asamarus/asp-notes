@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useFetch from '@/shared/lib/useFetch'
 import { tagsApi } from '@/entities/tag'
-import { getNoteFromResponse, notesApi, setNote } from '@/entities/note'
+import { notesApi, setNote } from '@/entities/note'
 import store from '@/shared/lib/store'
 import getCurrentSection from '@/shared/model/getCurrentSection'
 import { useCombobox } from '@mantine/core'
@@ -12,6 +12,7 @@ import { closeTagsModal } from '.'
 import { dispatchCrossTabEvent } from '@/shared/lib/useCrossTabEventListener'
 import noop from '@/shared/lib/noop'
 import useCurrentColor from '@/shared/lib/useCurrentColor'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import Loading from '@/shared/ui/loading'
 import { Button, Group, Checkbox, ScrollArea, Combobox, Pill, PillsInput } from '@mantine/core'
@@ -31,7 +32,7 @@ function TagsModal({ noteId = -1 }: TagsModalProps) {
     initialIsLoading: true,
   })
   const { request: updateTagsRequest, isLoading: isUpdateTagsLoading } = useFetch(
-    notesApi.updateNoteTags,
+    notesApi.updateNote,
   )
   const combobox = useCombobox()
   const [tags, setTags] = useState<Tag[]>([])
@@ -53,7 +54,7 @@ function TagsModal({ noteId = -1 }: TagsModalProps) {
       }
     }
 
-    getTagsRequest({ section: getCurrentSection(noteId) }, ({ data }) => {
+    getTagsRequest(getCurrentSection(noteId), ({ data }) => {
       if (data) {
         setTags(data.map((tag) => ({ name: tag?.name ?? '', count: tag.count })))
       }
@@ -183,11 +184,11 @@ function TagsModal({ noteId = -1 }: TagsModalProps) {
           loading={isUpdateTagsLoading}
           onClick={() => {
             if (isEditTagsModal) {
-              updateTagsRequest({ id: noteId, tags: selectedTags }, ({ data }) => {
+              updateTagsRequest({ id: noteId, request: { tags: selectedTags } }, ({ data }) => {
                 if (data) {
-                  const note = getNoteFromResponse(data.note)
-                  store.dispatch(setNote({ id: note.id, note }))
-                  dispatchCrossTabEvent(events.note.updated, note)
+                  store.dispatch(setNote({ id: data.id, note: data }))
+                  dispatchCrossTabEvent(events.note.updated, data)
+                  showSuccess('Note tags are updated!')
                 }
               })
             } else {

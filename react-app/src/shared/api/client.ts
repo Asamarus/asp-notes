@@ -46,7 +46,11 @@ const errorHandlingMiddleWare: Middleware = {
           showError(jsonBody.message)
         }
 
-        if (jsonBody.errors && typeof jsonBody.errors === 'object') {
+        if (
+          jsonBody.errors &&
+          typeof jsonBody.errors === 'object' &&
+          Object.keys(jsonBody.errors).length > 0
+        ) {
           Object.keys(jsonBody.errors).forEach((key) => {
             const errorArray = jsonBody.errors[key]
             if (Array.isArray(errorArray)) {
@@ -86,7 +90,6 @@ const successHandlingMiddleWare: Middleware = {
   },
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let client: ReturnType<typeof createClient<paths>> | null = null
 
 export function getClient() {

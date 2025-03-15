@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm } from '@mantine/form'
 import useFetch from '@/shared/lib/useFetch'
-import { getNoteFromResponse, notesApi, setNote, setNoteIsNotSaved } from '@/entities/note'
+import { notesApi, setNote, setNoteIsNotSaved } from '@/entities/note'
 import { events } from '@/shared/config'
 import { dispatchCrossTabEvent } from '@/shared/lib/useCrossTabEventListener'
 import useAppSelector from '@/shared/lib/useAppSelector'
 import store from '@/shared/lib/store'
 import useCurrentColor from '@/shared/lib/useCurrentColor'
+import { showSuccess } from '@/shared/lib/notifications'
 
-import { Controller } from 'react-hook-form'
 import NoteEditor from '@/shared/ui/noteEditor'
 import { Fieldset, TextInput, Button, Group, Input } from '@mantine/core'
 
@@ -19,35 +19,23 @@ export interface EditProps {
   id: number
 }
 
-type Inputs = {
-  title: string
-  content: string
-}
-
 function Edit({ id }: EditProps) {
   const { request, isLoading } = useFetch(notesApi.updateNote)
   const color = useCurrentColor()
   const title = useAppSelector((state) => state.notes.collection[id]?.title ?? '')
   const content = useAppSelector((state) => state.notes.collection[id]?.content ?? '')
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { isDirty },
-  } = useForm<Inputs>({
-    defaultValues: {
-      title: title,
-      content: content,
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      title,
+      content,
+    },
+    onValuesChange: () => {
+      // TODO: check if note is changed
+      store.dispatch(setNoteIsNotSaved(true))
     },
   })
-
-  useEffect(() => {
-    if (store.getState().notes.noteIsNotSaved !== isDirty) {
-      store.dispatch(setNoteIsNotSaved(isDirty))
-    }
-  }, [isDirty])
 
   useEffect(() => {
     const listener = (event: BeforeUnloadEvent) => {
@@ -61,25 +49,28 @@ function Edit({ id }: EditProps) {
     return () => window.removeEventListener('beforeunload', listener)
   }, [])
 
+  const { onBlur: noteEditorOnBlur } = form.getInputProps('content')
+
   return (
     <form
-      onSubmit={handleSubmit((formData) => {
+      onSubmit={form.onSubmit((values) => {
         request(
           {
             id: id,
-            title: formData.title,
-            content: formData.content,
+            request: {
+              title: values.title,
+              content: values.content,
+            },
           },
           ({ data }) => {
             if (data) {
-              const note = getNoteFromResponse(data.note)
-              store.dispatch(setNote({ id, note }))
-              dispatchCrossTabEvent(events.note.updated, note)
+              store.dispatch(setNote({ id, note: data }))
+              dispatchCrossTabEvent(events.note.updated, data)
               if (store.getState().notes.noteIsNotSaved) {
                 store.dispatch(setNoteIsNotSaved(false))
               }
 
-              reset({ title: note.title, content: note.content })
+              showSuccess('Note is updated!')
             }
           },
         )
@@ -91,27 +82,22 @@ function Edit({ id }: EditProps) {
       >
         <TextInput
           label="Title"
-          {...register('title')}
+          key={form.key('title')}
+          {...form.getInputProps('title')}
         />
-        <Controller
-          name="content"
-          control={control}
-          render={({ field }) => (
-            <Input.Wrapper label="Content">
-              <div className={styles['editor']}>
-                <NoteEditor
-                  disabled={isLoading}
-                  value={field.value}
-                  onBlur={field.onBlur}
-                  onChange={(_, editor) => {
-                    const value = editor.getData()
-                    field.onChange(value)
-                  }}
-                />
-              </div>
-            </Input.Wrapper>
-          )}
-        />
+        <Input.Wrapper label="Content">
+          <div className={styles['editor']}>
+            <NoteEditor
+              disabled={isLoading}
+              value={content}
+              onBlur={noteEditorOnBlur}
+              onChange={(_, editor) => {
+                form.setFieldValue('content', editor.getData())
+                //store.dispatch(setNoteIsNotSaved(true))
+              }}
+            />
+          </div>
+        </Input.Wrapper>
         <Group
           justify="flex-end"
           mt="md"

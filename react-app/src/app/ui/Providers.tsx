@@ -3,8 +3,9 @@ import { MantineProvider } from '@mantine/core'
 import { Provider } from 'react-redux'
 import { theme } from '../config/theme'
 import { Notifications } from '@mantine/notifications'
-//import { BrowserApiMockProvider } from '@/app/lib/msw'
-import ApplicationLoader from './ApplicationLoader'
+import { BrowserApiMockProvider } from '@/app/lib/msw'
+import UserLoader from './UserLoader'
+import ApplicationDataLoader from './ApplicationDataLoader'
 
 import store from '../model/store'
 
@@ -14,16 +15,18 @@ export interface ProvidersProps {
 }
 function Providers({ children }: ProvidersProps) {
   return (
-    //<BrowserApiMockProvider>
-    <BrowserRouter>
-      <MantineProvider theme={theme}>
-        <Provider store={store}>
-          <Notifications position="top-center" />
-          <ApplicationLoader>{children}</ApplicationLoader>
-        </Provider>
-      </MantineProvider>
-    </BrowserRouter>
-    //</BrowserApiMockProvider>
+    <BrowserApiMockProvider>
+      <BrowserRouter>
+        <MantineProvider theme={theme}>
+          <Provider store={store}>
+            <Notifications position="top-center" />
+            <UserLoader>
+              <ApplicationDataLoader>{children}</ApplicationDataLoader>
+            </UserLoader>
+          </Provider>
+        </MantineProvider>
+      </BrowserRouter>
+    </BrowserApiMockProvider>
   )
 }
 

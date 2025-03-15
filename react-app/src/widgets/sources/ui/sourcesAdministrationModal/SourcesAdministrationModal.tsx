@@ -3,7 +3,7 @@ import { openConfirmationModal } from '@/shared/ui/modalsManager'
 import useFetch from '@/shared/lib/useFetch'
 import createFetch from '@/shared/lib/createFetch'
 import { sourcesApi } from '@/entities/source'
-import { reorderNotesSources, getNoteSourcesFromResponse, setNoteSources } from '@/entities/note'
+import { reorderNotesSources, setNoteSources } from '@/entities/note'
 import { dispatchCrossTabEvent } from '@/shared/lib/useCrossTabEventListener'
 import noop from '@/shared/lib/noop'
 import store from '@/shared/lib/store'
@@ -11,6 +11,7 @@ import { events } from '@/shared/config'
 import { openAddNewSourceFormModal } from './ui/addNewSourceFormModal'
 import { openEditSourceFormModal } from './ui/editSourceFormModal'
 import useCurrentColor from '@/shared/lib/useCurrentColor'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import SortableList from '@/shared/ui/sortableList'
 import { Button, LoadingOverlay, Anchor } from '@mantine/core'
@@ -33,9 +34,10 @@ const handleSortEnd = (noteId: number, sources: NoteSource[]) => {
   const sourceIds = sources.map((source) => source.id)
 
   store.dispatch(reorderNotesSources({ id: noteId, sourceIds }))
-  reorderSourcesRequest({ noteId, sourceIds }, ({ data }) => {
+  reorderSourcesRequest({ noteId, request: { sourceIds } }, ({ data }) => {
     if (data) {
       dispatchCrossTabEvent(events.note.updated, store.getState().notes.collection[noteId])
+      showSuccess('Sources are reordered!')
     }
   })
 }
@@ -79,13 +81,12 @@ function SourcesAdministrationModal({ noteId }: SourcesAdministrationModalProps)
                   onConfirm: () => {
                     removeNoteSourceRequest({ noteId, sourceId: source.id }, ({ data }) => {
                       if (data) {
-                        const payload = getNoteSourcesFromResponse(data.sources ?? [])
-
-                        store.dispatch(setNoteSources({ id: noteId, sources: payload }))
+                        store.dispatch(setNoteSources({ id: noteId, sources: data }))
                         dispatchCrossTabEvent(
                           events.note.updated,
                           store.getState().notes.collection[noteId],
                         )
+                        showSuccess('Source is deleted!')
                       }
                     })
                   },

@@ -56,9 +56,9 @@ function NotesSearch() {
     const book = store.getState().notes.filters.book
     request(
       {
-        searchTerm: searchTerm,
-        section: getCurrentSection(),
-        book,
+        SearchTerm: searchTerm,
+        Section: getCurrentSection(),
+        Book: book,
       },
       ({ data }) => {
         if (data && !ignoreAutoCompleteRef.current) {

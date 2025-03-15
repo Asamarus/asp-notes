@@ -1,6 +1,6 @@
 import type { components } from '@/shared/api'
 
-const sectionsMocks = [
+const sectionsMocks: components['schemas']['SectionsItemResponse'][] = [
   {
     id: 1,
     name: 'it',
@@ -27,50 +27,35 @@ const sectionsMocks = [
   },
 ]
 
-export const getSectionsListResponseMock: components['schemas']['SectionsResponse'] = {
-  sections: sectionsMocks,
-}
+export const getSectionsListResponseMock = sectionsMocks
 
-export const createSectionRequestMock: components['schemas']['CreateSectionRequest'] = {
+export const createSectionRequestMock: components['schemas']['SectionsCreateRequest'] = {
   name: 'newSection',
   displayName: 'New Section',
   color: '#000000',
 }
 
-export const createSectionResponseMock: components['schemas']['SectionsResponse'] = {
-  message: 'Section is created successfully!',
-  showNotification: true,
-  sections: sectionsMocks,
-}
+export const createSectionResponseMock = sectionsMocks
 
-export const updateSectionRequestMock: components['schemas']['UpdateSectionRequest'] = {
+export const updateSectionRequestMock: {
+  id: number
+  request: components['schemas']['SectionsUpdateRequest']
+} = {
   id: 1,
-  displayName: 'Updated Section 1',
-  color: '#000000',
+  request: {
+    displayName: 'Updated Section 1',
+    color: '#000000',
+  },
 }
 
-export const updateSectionResponseMock: components['schemas']['SectionsResponse'] = {
-  message: 'Section is updated successfully!',
-  showNotification: true,
-  sections: sectionsMocks,
-}
+export const updateSectionResponseMock = sectionsMocks
 
-export const deleteSectionRequestMock: components['schemas']['DeleteSectionRequest'] = {
-  id: 1,
-}
+export const deleteSectionRequestMock = 1
 
-export const deleteSectionResponseMock: components['schemas']['SectionsResponse'] = {
-  message: 'Section is deleted successfully!',
-  showNotification: true,
-  sections: sectionsMocks,
-}
+export const deleteSectionResponseMock = sectionsMocks
 
-export const reorderSectionsRequestMock: components['schemas']['ReorderSectionsRequest'] = {
+export const reorderSectionsRequestMock: components['schemas']['SectionsReorderRequest'] = {
   ids: [3, 2, 1],
 }
 
-export const reorderSectionsResponseMock: components['schemas']['SectionsResponse'] = {
-  message: 'Sections are reordered successfully!',
-  showNotification: true,
-  sections: sectionsMocks,
-}
+export const reorderSectionsResponseMock = sectionsMocks

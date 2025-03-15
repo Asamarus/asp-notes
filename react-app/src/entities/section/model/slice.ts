@@ -19,9 +19,12 @@ const initialState: State = {
 }
 
 export const sectionsSlice = createSlice({
-  name: 'notes',
+  name: 'sections',
   initialState,
   reducers: {
+    setAllNotesSection: (state, action: PayloadAction<AllNotesSection>) => {
+      state.allNotesSection = action.payload
+    },
     setSections: (state, action: PayloadAction<Section[]>) => {
       state.list = action.payload
     },
@@ -37,4 +40,5 @@ export const sectionsSlice = createSlice({
   },
 })
 
-export const { setSections, setCurrentSection, reorderSections } = sectionsSlice.actions
+export const { setAllNotesSection, setSections, setCurrentSection, reorderSections } =
+  sectionsSlice.actions

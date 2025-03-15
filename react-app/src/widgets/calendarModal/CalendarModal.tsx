@@ -35,7 +35,7 @@ function CalendarModal() {
 
   useEffect(() => {
     request(
-      { month: selectedMonth + 1, year: selectedYear, section: getCurrentSection() },
+      { Month: selectedMonth + 1, Year: selectedYear, Section: getCurrentSection() },
       ({ data }) => {
         if (data) {
           setNoteDays(data.map((day) => dayjs(day.date).date()))

@@ -1,5 +1,0 @@
-@AspNotes_HostAddress = https://localhost:7070
-
-POST {{AspNotes_HostAddress}}/api/dev/test
-
-###

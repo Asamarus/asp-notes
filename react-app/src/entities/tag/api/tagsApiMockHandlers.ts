@@ -3,13 +3,8 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as tagsMocks from './tagsApiMockData'
 
 export const handlers = [
-  http.post('/api/tags/getList', async () => {
+  http.get('/api/tags', async () => {
     await mswDelay()
     return HttpResponse.json(tagsMocks.getTagsListResponseMock)
-  }),
-
-  http.post('/api/tags/autocomplete', async () => {
-    await mswDelay()
-    return HttpResponse.json(tagsMocks.autocompleteTagsResponseMock)
   }),
 ]

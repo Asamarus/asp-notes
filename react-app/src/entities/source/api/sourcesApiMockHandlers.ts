@@ -3,22 +3,22 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as sourcesMocks from './sourcesApiMockData'
 
 export const handlers = [
-  http.post('/api/sources/add', async () => {
+  http.post('/api/notes/1/sources', async () => {
     await mswDelay()
     return HttpResponse.json(sourcesMocks.addNoteSourceResponseMock)
   }),
 
-  http.post('/api/sources/update', async () => {
+  http.put('/api/notes/1/sources/1', async () => {
     await mswDelay()
     return HttpResponse.json(sourcesMocks.updateNoteSourceResponseMock)
   }),
 
-  http.post('/api/sources/remove', async () => {
+  http.delete('/api/notes/1/sources/1', async () => {
     await mswDelay()
     return HttpResponse.json(sourcesMocks.removeNoteSourceResponseMock)
   }),
 
-  http.post('/api/sources/reorder', async () => {
+  http.put('/api/notes/1/sources/reorder', async () => {
     await mswDelay()
     return HttpResponse.json(sourcesMocks.reorderNoteSourcesResponseMock)
   }),

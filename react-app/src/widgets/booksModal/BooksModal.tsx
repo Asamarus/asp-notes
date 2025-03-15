@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useFetch from '@/shared/lib/useFetch'
 import { booksApi } from '@/entities/book'
-import { getNoteFromResponse, notesApi, setNote } from '@/entities/note'
+import { notesApi, setNote } from '@/entities/note'
 import store from '@/shared/lib/store'
 import getCurrentSection from '@/shared/model/getCurrentSection'
 import { useCombobox } from '@mantine/core'
@@ -11,6 +11,7 @@ import { dispatchCustomEvent } from '@/shared/lib/useCustomEventListener'
 import { closeBooksModal } from '.'
 import { dispatchCrossTabEvent } from '@/shared/lib/useCrossTabEventListener'
 import useCurrentColor from '@/shared/lib/useCurrentColor'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import Loading from '@/shared/ui/loading'
 import {
@@ -40,7 +41,7 @@ function BooksModal({ noteId = -1 }: BooksModalProps) {
     },
   )
   const { request: updateNoteBookRequest, isLoading: isUpdateNoteBookLoading } = useFetch(
-    notesApi.updateNoteBook,
+    notesApi.updateNote,
   )
   const combobox = useCombobox()
   const [books, setBooks] = useState<Book[]>([])
@@ -62,7 +63,7 @@ function BooksModal({ noteId = -1 }: BooksModalProps) {
       }
     }
 
-    getBooksRequest({ section: getCurrentSection(noteId) }, ({ data }) => {
+    getBooksRequest(getCurrentSection(noteId), ({ data }) => {
       if (data) {
         setBooks(data.map((book) => ({ name: book?.name ?? '', count: book.count })))
       }
@@ -164,11 +165,11 @@ function BooksModal({ noteId = -1 }: BooksModalProps) {
           loading={isUpdateNoteBookLoading}
           onClick={() => {
             if (isChangeBookModal) {
-              updateNoteBookRequest({ id: noteId, book: selectedBook }, ({ data }) => {
+              updateNoteBookRequest({ id: noteId, request: { book: selectedBook } }, ({ data }) => {
                 if (data) {
-                  const note = getNoteFromResponse(data.note)
-                  store.dispatch(setNote({ id: note.id, note }))
-                  dispatchCrossTabEvent(events.note.updated, note)
+                  store.dispatch(setNote({ id: data.id, note: data }))
+                  dispatchCrossTabEvent(events.note.updated, data)
+                  showSuccess('Note book is updated!')
                 }
               })
             } else {

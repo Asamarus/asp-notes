@@ -1,12 +1,5 @@
-export interface Section {
-  id: number
-  name: string
-  displayName: string
-  color: string
-}
+import { components } from '@/shared/api'
 
-export interface AllNotesSection {
-  name: string
-  displayName: string
-  color: string
-}
+export type Section = components['schemas']['SectionsItemResponse']
+
+export type AllNotesSection = components['schemas']['AllNotesSection']

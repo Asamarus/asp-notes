@@ -76,7 +76,7 @@ export const notesSlice = createSlice({
     reorderNotesSources(state, action: PayloadAction<{ id: number; sourceIds: string[] }>) {
       const sources = action.payload.sourceIds
         .map((sourceId) =>
-          state.collection[action.payload.id].sources.find((source) => source.id === sourceId),
+          state.collection[action.payload.id].sources?.find((source) => source.id === sourceId),
         )
         .filter((source) => source !== undefined)
       state.collection[action.payload.id].sources = sources

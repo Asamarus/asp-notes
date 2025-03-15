@@ -13,6 +13,8 @@ db/
 # Serilog files
 logs/
 
+wwwroot/
+
 # NuGet packages
 *.nuget.props
 *.nuget.targets

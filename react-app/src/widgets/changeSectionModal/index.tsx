@@ -4,7 +4,7 @@ import ChangeSectionModalLoader from './ChangeSectionModalLoader'
 
 const modalId = 'changeSectionModal'
 
-function openChangeSectionModal(noteId: number) {
+function openChangeSectionModal(noteId: number, closeNoteModal?: () => void) {
   openModal({
     modalId: modalId,
     name: 'content',
@@ -14,7 +14,12 @@ function openChangeSectionModal(noteId: number) {
       size: 500,
     },
     data: {
-      children: <ChangeSectionModalLoader noteId={noteId} />,
+      children: (
+        <ChangeSectionModalLoader
+          noteId={noteId}
+          closeNoteModal={closeNoteModal}
+        />
+      ),
     },
   })
 }

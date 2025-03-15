@@ -3,7 +3,7 @@ import type { components } from '@/shared/api'
 
 export async function getSectionsList() {
   try {
-    const { data, error } = await getClient().POST('/api/sections/getList')
+    const { data, error } = await getClient().GET('/api/sections')
     return { data, error }
   } catch (error) {
     console.error('sectionsApi.getSectionsList', error)
@@ -11,9 +11,9 @@ export async function getSectionsList() {
   }
 }
 
-export async function createSection(request: components['schemas']['CreateSectionRequest']) {
+export async function createSection(request: components['schemas']['SectionsCreateRequest']) {
   try {
-    const { data, error } = await getClient().POST('/api/sections/create', {
+    const { data, error } = await getClient().POST('/api/sections', {
       body: request,
     })
     return { data, error }
@@ -23,9 +23,16 @@ export async function createSection(request: components['schemas']['CreateSectio
   }
 }
 
-export async function updateSection(request: components['schemas']['UpdateSectionRequest']) {
+export async function updateSection({
+  id,
+  request,
+}: {
+  id: number
+  request: components['schemas']['SectionsUpdateRequest']
+}) {
   try {
-    const { data, error } = await getClient().POST('/api/sections/update', {
+    const { data, error } = await getClient().PUT('/api/sections/{id}', {
+      params: { path: { id } },
       body: request,
     })
     return { data, error }
@@ -35,10 +42,10 @@ export async function updateSection(request: components['schemas']['UpdateSectio
   }
 }
 
-export async function deleteSection(request: components['schemas']['DeleteSectionRequest']) {
+export async function deleteSection(id: number) {
   try {
-    const { data, error } = await getClient().POST('/api/sections/delete', {
-      body: request,
+    const { data, error } = await getClient().DELETE('/api/sections/{id}', {
+      params: { path: { id } },
     })
     return { data, error }
   } catch (error) {
@@ -47,9 +54,9 @@ export async function deleteSection(request: components['schemas']['DeleteSectio
   }
 }
 
-export async function reorderSections(request: components['schemas']['ReorderSectionsRequest']) {
+export async function reorderSections(request: components['schemas']['SectionsReorderRequest']) {
   try {
-    const { data, error } = await getClient().POST('/api/sections/reorder', {
+    const { data, error } = await getClient().PUT('/api/sections/reorder', {
       body: request,
     })
     return { data, error }

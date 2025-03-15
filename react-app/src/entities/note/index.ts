@@ -1,8 +1,6 @@
 import * as notesApi from './api/notesApi'
 import { handlers } from './api/notesApiMockHandlers'
 export { notesApi, handlers as notesApiMockHandlers }
-export { default as getNoteFromResponse } from './model/getNoteFromResponse'
-export { default as getNoteSourcesFromResponse } from './model/getNoteSourcesFromResponse'
 export * from './model/slice'
 export * from './model/types'
 export { default as NoteLoader } from './ui/noteLoader'

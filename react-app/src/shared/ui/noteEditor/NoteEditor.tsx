@@ -53,6 +53,7 @@ export interface NoteEditorProps {
 }
 
 const editorConfig: EditorConfig = {
+  licenseKey: 'GPL',
   toolbar: {
     items: [
       'fullscreen',
@@ -162,6 +163,7 @@ const editorConfig: EditorConfig = {
       { language: 'javascript', label: 'JavaScript' },
       { language: 'css', label: 'CSS' },
       { language: 'html', label: 'HTML' },
+      { language: 'xml', label: 'XML' },
       { language: 'python', label: 'Python' },
       { language: 'sql', label: 'SQL' },
       { language: 'json', label: 'JSON' },
@@ -172,7 +174,6 @@ const editorConfig: EditorConfig = {
       { language: 'bash', label: 'Bash' },
       { language: 'diff', label: 'Diff' },
       { language: 'git', label: 'git' },
-      { language: 'php', label: 'PHP' },
     ],
   },
 }

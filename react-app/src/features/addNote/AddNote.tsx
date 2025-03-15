@@ -52,8 +52,8 @@ function AddNote() {
               ({ data }) => {
                 if (data) {
                   dispatchCustomEvent(events.notesList.search)
-                  if (data.note.id) {
-                    openNoteModal({ id: data.note.id, tab: 'edit' })
+                  if (data.id) {
+                    openNoteModal({ id: data.id, tab: 'edit' })
                   }
                 }
               },

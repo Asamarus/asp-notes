@@ -3,13 +3,8 @@ import mswDelay from '@/shared/lib/mswDelay'
 import * as booksMocks from './booksApiMockData'
 
 export const handlers = [
-  http.post('/api/books/getList', async () => {
+  http.get('/api/books', async () => {
     await mswDelay()
     return HttpResponse.json(booksMocks.getBooksListResponseMock)
-  }),
-
-  http.post('/api/books/autocomplete', async () => {
-    await mswDelay()
-    return HttpResponse.json(booksMocks.autocompleteBooksResponseMock)
   }),
 ]

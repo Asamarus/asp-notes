@@ -4,6 +4,7 @@ import useFetch from '@/shared/lib/useFetch'
 import { events } from '@/shared/config'
 import { dispatchCrossTabEvent } from '@/shared/lib/useCrossTabEventListener'
 import store from '@/shared/lib/store'
+import { showSuccess } from '@/shared/lib/notifications'
 
 import { Button } from '@mantine/core'
 import { MdDelete } from 'react-icons/md'
@@ -25,18 +26,14 @@ function Delete({ id, onClose }: DeleteProps) {
           title: `Delete #${id} note`,
           message: 'Are you sure you want to delete this note?',
           onConfirm: () => {
-            request(
-              {
-                id: id,
-              },
-              ({ data }) => {
-                if (data) {
-                  onClose()
-                  store.dispatch(removeNote(id))
-                  dispatchCrossTabEvent(events.note.deleted, id)
-                }
-              },
-            )
+            request(id, ({ error }) => {
+              if (!error) {
+                onClose()
+                store.dispatch(removeNote(id))
+                dispatchCrossTabEvent(events.note.deleted, id)
+                showSuccess('Note is deleted!')
+              }
+            })
           },
         })
       }}

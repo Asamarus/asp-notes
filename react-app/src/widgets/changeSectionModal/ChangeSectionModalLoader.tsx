@@ -5,12 +5,16 @@ const ChangeSectionModal = lazy(() => import('./ChangeSectionModal'))
 
 export interface ChangeSectionModalLoaderProps {
   noteId: number
+  closeNoteModal?: () => void
 }
 
-function ChangeSectionModalLoader({ noteId }: ChangeSectionModalLoaderProps) {
+function ChangeSectionModalLoader({ noteId, closeNoteModal }: ChangeSectionModalLoaderProps) {
   return (
     <ComponentLoader>
-      <ChangeSectionModal noteId={noteId} />
+      <ChangeSectionModal
+        noteId={noteId}
+        closeNoteModal={closeNoteModal}
+      />
     </ComponentLoader>
   )
 }

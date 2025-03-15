@@ -1,10 +1,8 @@
 import type { components } from '@/shared/api'
 
-export const getBooksListRequestMock: components['schemas']['GetBooksListRequest'] = {
-  section: 'section1',
-}
+export const getBooksListRequestMock = 'section1'
 
-export const getBooksListResponseMock: components['schemas']['BookItemResponse'][] = [
+export const getBooksListResponseMock: components['schemas']['ItemNameCountResponse'][] = [
   {
     name: 'book1',
     count: 1,
@@ -18,10 +16,3 @@ export const getBooksListResponseMock: components['schemas']['BookItemResponse']
     count: 15,
   },
 ]
-
-export const autocompleteBooksRequestMock: components['schemas']['AutocompleteBooksRequest'] = {
-  section: 'section1',
-  searchTerm: 'book',
-}
-
-export const autocompleteBooksResponseMock: string[] = ['book1', 'book2', 'book3']

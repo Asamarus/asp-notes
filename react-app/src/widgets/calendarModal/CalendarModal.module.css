@@ -6,5 +6,5 @@
   align-items: center;
   cursor: pointer;
   user-select: none;
-  color: var(--mantine-color-text);
+  color: light-dark(#fff, var(--mantine-color-text));
 }

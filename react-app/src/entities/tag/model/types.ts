@@ -1,4 +1,3 @@
-export interface Tag {
-  count: number
-  name: string
-}
+import { components } from '@/shared/api'
+
+export type Tag = components['schemas']['ItemNameCountResponse']

@@ -14,11 +14,11 @@ describe('usersApi', () => {
 
   it('should logout a user', async () => {
     const { data } = await logout()
-    expect(data).toEqual(usersMocks.logoutResponseMock)
+    expect(data).toEqual(null)
   })
 
   it('should change password', async () => {
     const { data } = await changePassword(usersMocks.changePasswordRequestMock)
-    expect(data).toEqual(usersMocks.changePasswordResponseMock)
+    expect(data).toEqual(undefined)
   })
 })

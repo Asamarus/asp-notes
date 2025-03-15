@@ -1,5 +1,5 @@
-import { useForm, Controller } from 'react-hook-form'
-import { getNoteFromResponse, notesApi } from '@/entities/note'
+import { useForm } from '@mantine/form'
+import { notesApi } from '@/entities/note'
 import useFetch from '@/shared/lib/useFetch'
 import useAppSelector from '@/shared/lib/useAppSelector'
 import { closeChangeSectionModal } from '.'
@@ -10,43 +10,41 @@ import useCurrentColor from '@/shared/lib/useCurrentColor'
 
 import { Select, Fieldset, Group, Button } from '@mantine/core'
 
-type Inputs = {
-  section: string
-}
-
 export interface ChangeSectionModalProps {
   noteId: number
+  closeNoteModal?: () => void
 }
 
-function ChangeSectionModal({ noteId }: ChangeSectionModalProps) {
-  const { request, isLoading } = useFetch(notesApi.updateNoteSection)
+function ChangeSectionModal({ noteId, closeNoteModal }: ChangeSectionModalProps) {
+  const { request, isLoading } = useFetch(notesApi.updateNote)
   const color = useCurrentColor()
   const section = useAppSelector((state) => state.notes.collection[noteId]?.section ?? '')
   const sections = useAppSelector((state) => state.sections.list)
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: {
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
       section: section,
+    },
+    validate: {
+      section: (value) => (!value ? 'Section is required' : null),
     },
   })
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
+      onSubmit={form.onSubmit((values) => {
         request(
           {
             id: noteId,
-            section: data.section,
+            request: { section: values.section },
           },
           ({ data }) => {
             if (data) {
               closeChangeSectionModal()
+              closeNoteModal?.()
               dispatchCustomEvent(events.notesList.search)
-              dispatchCrossTabEvent(events.note.updated, getNoteFromResponse(data.note))
+              dispatchCrossTabEvent(events.note.updated, data)
             }
           },
         )
@@ -56,21 +54,12 @@ function ChangeSectionModal({ noteId }: ChangeSectionModalProps) {
         disabled={isLoading}
         variant="unstyled"
       >
-        <Controller
-          name="section"
-          control={control}
-          rules={{
-            required: 'Section is required',
-          }}
-          render={({ field }) => (
-            <Select
-              withAsterisk
-              label="Section"
-              {...field}
-              data={sections.map((o) => ({ value: o.name, label: o.displayName }))}
-              error={errors.section && errors.section.message}
-            />
-          )}
+        <Select
+          withAsterisk
+          label="Section"
+          data={sections.map((o) => ({ value: o.name, label: o.displayName }))}
+          key={form.key('section')}
+          {...form.getInputProps('section')}
         />
         <Group
           justify="flex-end"

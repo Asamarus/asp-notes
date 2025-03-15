@@ -1,54 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon/main.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon" href="/favicon.png" />
+  <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no" />
   <meta name="theme-color" content="#fff">
   <title>Notes</title>
+  <link rel="manifest" href="/manifest.json">
 </head>
 
 <body>
   <div id="root"></div>
-  <script>
-    window.__PRELOADED_STATE__ = {
-      sections: {
-        allNotesSection: {
-          name: 'all',
-          displayName: 'Notes',
-          color: '#1e88e5',
-        },
-        list: [
-          {
-            id: 1,
-            name: 'it',
-            displayName: 'IT',
-            color: '#f9a825',
-          },
-          {
-            id: 2,
-            name: 'dot_net',
-            displayName: '.Net',
-            color: '#607d8b',
-          },
-          {
-            id: 3,
-            name: 'front_end',
-            displayName: 'Front-end',
-            color: '#4caf50',
-          },
-          {
-            id: 4,
-            name: 'database',
-            displayName: 'Database',
-            color: '#44bdb9',
-          },
-        ]
-      }
-    };
-  </script>
   <script type="module" src="/src/app/index.tsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>

@@ -1,4 +1,3 @@
-export interface Book {
-  count: number
-  name: string
-}
+import { components } from '@/shared/api'
+
+export type Book = components['schemas']['ItemNameCountResponse']

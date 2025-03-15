@@ -4,130 +4,166 @@
  */
 
 export interface paths {
-    "/api/accounts/login": {
+    "/api/application-data": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDataResponse"];
+                    };
+                };
+            };
+        };
         put?: never;
-        /**
-         * Retrieves a specific account by unique id
-         * @description Retrieves the account details
-         */
-        post: {
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/books": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
             parameters: {
                 query?: {
-                    withToken?: number;
+                    section?: string;
                 };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["LoginRequest"];
-                    "text/json": components["schemas"]["LoginRequest"];
-                    "application/*+json": components["schemas"]["LoginRequest"];
-                };
-            };
-            responses: {
-                /** @description Account details retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LoginResponse"];
-                    };
-                };
-                /** @description Account has missing/invalid values */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/accounts/getUser": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Retrieves the currently logged in user
-         * @description Returns a response containing the user's details
-         */
-        post: {
-            parameters: {
-                query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
             requestBody?: never;
             responses: {
-                /** @description User details retrieved successfully */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["UserResponse"];
+                        "application/json": components["schemas"]["ItemNameCountResponse"][];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/accounts/logout": {
+    "/api/notes": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Logs out the user
-         * @description Deletes the JWT token from the cookies
-         */
-        post: {
+        get: {
             parameters: {
-                query?: never;
+                query?: {
+                    Section?: string;
+                    SearchTerm?: string;
+                    Page?: number;
+                    Book?: string;
+                    Tags?: string[];
+                    InRandomOrder?: boolean;
+                    WithoutBook?: boolean;
+                    WithoutTags?: boolean;
+                    FromDate?: string;
+                    ToDate?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
             requestBody?: never;
             responses: {
-                /** @description User logged out */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SuccessResponse"];
+                        "application/json": components["schemas"]["PaginatedResponseOfNotesItemResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["NotesCreateRequest"];
+                    "text/json": components["schemas"]["NotesCreateRequest"];
+                    "application/*+json": components["schemas"]["NotesCreateRequest"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NotesItemResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
@@ -138,214 +174,152 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/accounts/changePassword": {
+    "/api/notes/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Changes the password of the user
-         * @description Requires the current password for verification
-         */
-        post: {
+        get: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: number;
+                };
                 cookie?: never;
             };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["ChangePasswordRequest"];
-                    "text/json": components["schemas"]["ChangePasswordRequest"];
-                    "application/*+json": components["schemas"]["ChangePasswordRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Password updated */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SuccessResponse"];
+                        "application/json": components["schemas"]["NotesItemResponse"];
                     };
                 };
-                /** @description Invalid current password */
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/books/getList": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Retrieves a list of books based on the provided section. */
-        post: {
+        patch: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: number;
+                };
                 cookie?: never;
             };
-            /** @description The request containing the section to filter books. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["GetBooksListRequest"];
-                    "text/json": components["schemas"]["GetBooksListRequest"];
-                    "application/*+json": components["schemas"]["GetBooksListRequest"];
+                    "application/json": components["schemas"]["NotesPatchRequest"];
+                    "text/json": components["schemas"]["NotesPatchRequest"];
+                    "application/*+json": components["schemas"]["NotesPatchRequest"];
                 };
             };
             responses: {
-                /** @description Returns the list of books. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["BookItemResponse"][];
+                        "application/json": components["schemas"]["NotesItemResponse"];
                     };
                 };
-                /** @description If the section name is invalid. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/books/autocomplete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Provides book name suggestions based on the input term and optional section. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The autocomplete request containing the search term and optional section. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["AutocompleteBooksRequest"];
-                    "text/json": components["schemas"]["AutocompleteBooksRequest"];
-                    "application/*+json": components["schemas"]["AutocompleteBooksRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns the list of suggested book names. */
-                200: {
+                /** @description Not Found */
+                404: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": string[];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
-                /** @description If the section name is invalid. */
-                400: {
+                /** @description Internal Server Error */
+                500: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notes/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Searches for notes based on the provided search criteria. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The search criteria for notes. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["SearchNotesRequest"];
-                    "text/json": components["schemas"]["SearchNotesRequest"];
-                    "application/*+json": components["schemas"]["SearchNotesRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns the search results. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["SearchNotesResponse"];
-                    };
-                };
-                /** @description If the search criteria are not valid, for example, if a specified section does not exist. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/api/notes/autocomplete": {
@@ -355,104 +329,96 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Provides autocomplete suggestions for notes, books, and tags based on the provided search term and optional section. */
-        post: {
+        get: {
             parameters: {
-                query?: never;
+                query?: {
+                    SearchTerm?: string;
+                    Section?: string;
+                    Book?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The autocomplete request containing the search term and optional section. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["AutocompleteNotesRequest"];
-                    "text/json": components["schemas"]["AutocompleteNotesRequest"];
-                    "application/*+json": components["schemas"]["AutocompleteNotesRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Returns the autocomplete suggestions. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["AutocompleteNotesResponse"];
+                        "application/json": components["schemas"]["NotesAutocompleteResponse"];
                     };
                 };
-                /** @description If the search criteria are not valid, for example, if a specified section does not exist. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/notes/get": {
+    "/api/notes/calendar": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Retrieves a specific note by its ID. */
-        post: {
+        get: {
             parameters: {
-                query?: never;
+                query?: {
+                    Month?: number;
+                    Year?: number;
+                    Section?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The request containing the ID of the note to retrieve. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["GetNoteRequest"];
-                    "text/json": components["schemas"]["GetNoteRequest"];
-                    "application/*+json": components["schemas"]["GetNoteRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Returns the requested note details. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["NoteResponse"];
+                        "application/json": components["schemas"]["NotesCalendarDaysResponseItem"][];
                     };
                 };
-                /** @description If the note with the specified ID is not found. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/notes/create": {
+    "/api/notes/{noteId}/sources": {
         parameters: {
             query?: never;
             header?: never;
@@ -461,39 +427,48 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Creates a new note in the specified section. */
         post: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    noteId: number;
+                };
                 cookie?: never;
             };
-            /** @description The request containing the details for creating a new note, including the section and optional book. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["CreateNoteRequest"];
-                    "text/json": components["schemas"]["CreateNoteRequest"];
-                    "application/*+json": components["schemas"]["CreateNoteRequest"];
+                    "application/json": components["schemas"]["NotesSourceCreateRequest"];
+                    "text/json": components["schemas"]["NotesSourceCreateRequest"];
+                    "application/*+json": components["schemas"]["NotesSourceCreateRequest"];
                 };
             };
             responses: {
-                /** @description Returns the details of the created note. */
-                200: {
+                /** @description Created */
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["NoteResponse"];
+                        "application/json": components["schemas"]["NotesSource"][];
                     };
                 };
-                /** @description If the specified section is not found or the book update fails. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
@@ -504,7 +479,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/notes/update": {
+    "/api/notes/{noteId}/sources/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -512,103 +487,101 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** Updates the title and content of an existing note. */
-        post: {
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    noteId: number;
+                    id: string;
+                };
                 cookie?: never;
             };
-            /** @description The request containing the ID of the note to update along with the new title and content. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["UpdateNoteRequest"];
-                    "text/json": components["schemas"]["UpdateNoteRequest"];
-                    "application/*+json": components["schemas"]["UpdateNoteRequest"];
+                    "application/json": components["schemas"]["NotesSourceUpdateRequest"];
+                    "text/json": components["schemas"]["NotesSourceUpdateRequest"];
+                    "application/*+json": components["schemas"]["NotesSourceUpdateRequest"];
                 };
             };
             responses: {
-                /** @description Returns the updated note details. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["NoteResponse"];
+                        "application/json": components["schemas"]["NotesSource"][];
                     };
                 };
-                /** @description If the note with the specified ID is not found. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notes/updateBook": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Updates the book associated with a specific note. */
-        post: {
+        post?: never;
+        delete: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    noteId: number;
+                    id: string;
+                };
                 cookie?: never;
             };
-            /** @description The request containing the ID of the note and the new book details. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateNoteBookRequest"];
-                    "text/json": components["schemas"]["UpdateNoteBookRequest"];
-                    "application/*+json": components["schemas"]["UpdateNoteBookRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Returns a success message and the updated note details. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["NoteResponse"];
+                        "application/json": components["schemas"]["NotesSource"][];
                     };
                 };
-                /** @description If the note with the specified ID is not found or the book update fails. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/notes/updateTags": {
+    "/api/notes/{noteId}/sources/reorder": {
         parameters: {
             query?: never;
             header?: never;
@@ -616,211 +589,58 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** Updates the tags associated with a specific note. */
-        post: {
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    noteId: number;
+                };
                 cookie?: never;
             };
-            /** @description The request containing the ID of the note and the new tags. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["UpdateNoteTagsRequest"];
-                    "text/json": components["schemas"]["UpdateNoteTagsRequest"];
-                    "application/*+json": components["schemas"]["UpdateNoteTagsRequest"];
+                    "application/json": components["schemas"]["NotesSourcesReorderRequest"];
+                    "text/json": components["schemas"]["NotesSourcesReorderRequest"];
+                    "application/*+json": components["schemas"]["NotesSourcesReorderRequest"];
                 };
             };
             responses: {
-                /** @description Returns a success message and the updated note details. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["NoteResponse"];
+                        "application/json": components["schemas"]["NotesSource"][];
                     };
                 };
-                /** @description If the note with the specified ID is not found or the tags update fails. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
         };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/notes/updateSection": {
+    "/api/sections": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Updates the section of a specific note. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the ID of the note and the new section name. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateNoteSectionRequest"];
-                    "text/json": components["schemas"]["UpdateNoteSectionRequest"];
-                    "application/*+json": components["schemas"]["UpdateNoteSectionRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns a success message indicating the note has been moved to another section, along with the updated note details. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["NoteResponse"];
-                    };
-                };
-                /** @description If the section name is invalid, the note is not found, or updates to the book or tags fail. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notes/delete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Deletes a specific note by its ID. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the ID of the note to be deleted. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["DeleteNoteRequest"];
-                    "text/json": components["schemas"]["DeleteNoteRequest"];
-                    "application/*+json": components["schemas"]["DeleteNoteRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns a success message indicating the note has been deleted. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["SuccessResponse"];
-                    };
-                };
-                /** @description If the note is not found or the deletion fails. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notes/getCalendarDays": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Retrieves a list of days within a specified month and year, optionally filtered by section, that contain notes. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the month, year, and optional section to filter the calendar days. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["GetNoteCalendarDaysRequest"];
-                    "text/json": components["schemas"]["GetNoteCalendarDaysRequest"];
-                    "application/*+json": components["schemas"]["GetNoteCalendarDaysRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns a list of calendar days that contain notes, each with the date and the number of notes for that day. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["NoteCalendarDaysResponseItem"][];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/sections/getList": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Retrieves all sections
-         * @description Returns a list of all sections
-         */
-        post: {
+        get: {
             parameters: {
                 query?: never;
                 header?: never;
@@ -829,13 +649,49 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Sections retrieved successfully */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SectionsResponse"];
+                        "application/json": components["schemas"]["SectionsItemResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SectionsCreateRequest"];
+                    "text/json": components["schemas"]["SectionsCreateRequest"];
+                    "application/*+json": components["schemas"]["SectionsCreateRequest"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SectionsItemResponse"][];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
@@ -846,7 +702,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/sections/create": {
+    "/api/sections/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -854,149 +710,93 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** Creates a new section with the provided details. */
-        post: {
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: number;
+                };
                 cookie?: never;
             };
-            /** @description The details of the section to create. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["CreateSectionRequest"];
-                    "text/json": components["schemas"]["CreateSectionRequest"];
-                    "application/*+json": components["schemas"]["CreateSectionRequest"];
+                    "application/json": components["schemas"]["SectionsUpdateRequest"];
+                    "text/json": components["schemas"]["SectionsUpdateRequest"];
+                    "application/*+json": components["schemas"]["SectionsUpdateRequest"];
                 };
             };
             responses: {
-                /** @description If the section is created successfully. The response includes the details of all sections. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SectionsResponse"];
+                        "application/json": components["schemas"]["SectionsItemResponse"][];
                     };
                 };
-                /** @description If the section name is not unique. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/sections/update": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Updates an existing section with the provided details. */
-        post: {
+        post?: never;
+        delete: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: number;
+                };
                 cookie?: never;
             };
-            /** @description The details of the section to update. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateSectionRequest"];
-                    "text/json": components["schemas"]["UpdateSectionRequest"];
-                    "application/*+json": components["schemas"]["UpdateSectionRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description If the section is updated successfully. The response includes the updated list of sections. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SectionsResponse"];
+                        "application/json": components["schemas"]["SectionsItemResponse"][];
                     };
                 };
-                /** @description If the section with the provided ID is not found or the update operation fails. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/sections/delete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Deletes a section based on the provided section ID. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the ID of the section to delete. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["DeleteSectionRequest"];
-                    "text/json": components["schemas"]["DeleteSectionRequest"];
-                    "application/*+json": components["schemas"]["DeleteSectionRequest"];
-                };
-            };
-            responses: {
-                /** @description If the section is deleted successfully. The response includes the updated list of sections. */
-                200: {
+                /** @description Not Found */
+                404: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SectionsResponse"];
-                    };
-                };
-                /** @description If the section with the provided ID is not found or the deletion operation fails. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1010,40 +810,136 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** Reorders sections based on the provided order. */
-        post: {
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The request containing the new order of sections. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["ReorderSectionsRequest"];
-                    "text/json": components["schemas"]["ReorderSectionsRequest"];
-                    "application/*+json": components["schemas"]["ReorderSectionsRequest"];
+                    "application/json": components["schemas"]["SectionsReorderRequest"];
+                    "text/json": components["schemas"]["SectionsReorderRequest"];
+                    "application/*+json": components["schemas"]["SectionsReorderRequest"];
                 };
             };
             responses: {
-                /** @description If the sections are reordered successfully. The response includes the updated list of sections. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SectionsResponse"];
+                        "application/json": components["schemas"]["SectionsItemResponse"][];
                     };
                 };
-                /** @description If the reorder operation fails. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    section?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ItemNameCountResponse"][];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: {
+                    withToken?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UsersLoginRequest"];
+                    "text/json": components["schemas"]["UsersLoginRequest"];
+                    "application/*+json": components["schemas"]["UsersLoginRequest"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UsersLoginResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
@@ -1054,7 +950,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/sources/add": {
+    "/api/users/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -1063,7 +959,6 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Adds a new source to a note. */
         post: {
             parameters: {
                 query?: never;
@@ -1071,31 +966,15 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            /** @description The request containing the note ID and source URL to add. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["AddNoteSourceRequest"];
-                    "text/json": components["schemas"]["AddNoteSourceRequest"];
-                    "application/*+json": components["schemas"]["AddNoteSourceRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Returns the updated list of sources for the note. */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SourcesResponse"];
-                    };
-                };
-                /** @description If the note is not found or the request is invalid. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": unknown;
                     };
                 };
             };
@@ -1106,59 +985,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/sources/update": {
+    "/api/users": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Updates an existing source of a note. */
-        post: {
+        get: {
             parameters: {
                 query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The request containing the note ID, source ID, and new source details. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateNoteSourceRequest"];
-                    "text/json": components["schemas"]["UpdateNoteSourceRequest"];
-                    "application/*+json": components["schemas"]["UpdateNoteSourceRequest"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Returns the updated list of sources for the note. */
+                /** @description OK */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SourcesResponse"];
+                        "application/json": components["schemas"]["UsersCurrentUserResponse"];
                     };
                 };
-                /** @description If the note or source is not found or the request is invalid. */
-                400: {
+                /** @description Unauthorized */
+                401: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/sources/remove": {
+    "/api/users/password": {
         parameters: {
             query?: never;
             header?: never;
@@ -1166,200 +1037,60 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** Removes a source from a note. */
-        post: {
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The request containing the note ID and source ID to remove. */
-            requestBody?: {
+            requestBody: {
                 content: {
-                    "application/json": components["schemas"]["RemoveNoteSourceRequest"];
-                    "text/json": components["schemas"]["RemoveNoteSourceRequest"];
-                    "application/*+json": components["schemas"]["RemoveNoteSourceRequest"];
+                    "application/json": components["schemas"]["UsersChangePasswordRequest"];
+                    "text/json": components["schemas"]["UsersChangePasswordRequest"];
+                    "application/*+json": components["schemas"]["UsersChangePasswordRequest"];
                 };
             };
             responses: {
-                /** @description Returns the updated list of sources for the note. */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SourcesResponse"];
+                        "application/json": unknown;
                     };
                 };
-                /** @description If the note or source is not found or the request is invalid. */
+                /** @description Bad Request */
                 400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/sources/reorder": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Reorders the sources of a note. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the note ID and a list of source IDs in the new order. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["ReorderNoteSourcesRequest"];
-                    "text/json": components["schemas"]["ReorderNoteSourcesRequest"];
-                    "application/*+json": components["schemas"]["ReorderNoteSourcesRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns the reordered list of sources for the note. */
-                200: {
+                /** @description Unauthorized */
+                401: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["SourcesResponse"];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
-                /** @description If the note is not found, a source is not found, or the request is invalid. */
-                400: {
+                /** @description Not Found */
+                404: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
+                        "application/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/tags/getList": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Retrieves a list of tags based on the provided section. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The request containing the section to filter tags. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["GetTagsListRequest"];
-                    "text/json": components["schemas"]["GetTagsListRequest"];
-                    "application/*+json": components["schemas"]["GetTagsListRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns the list of tags. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TagItemResponse"][];
-                    };
-                };
-                /** @description If the section name is invalid. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/tags/autocomplete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Provides tag name suggestions based on the input term and optional section. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description The autocomplete request containing the search term and optional section. */
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["AutocompleteTagsRequest"];
-                    "text/json": components["schemas"]["AutocompleteTagsRequest"];
-                    "application/*+json": components["schemas"]["AutocompleteTagsRequest"];
-                };
-            };
-            responses: {
-                /** @description Returns the list of suggested tag names. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": string[];
-                    };
-                };
-                /** @description If the section name is invalid. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1370,223 +1101,75 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AddNoteSourceRequest: {
-            /** Format: int64 */
-            noteId: number;
-            /** Format: uri */
-            link: string;
-        };
-        AutoCompleteNotesItemResponse: {
-            /** Format: int64 */
-            id: number;
-            title: string | null;
-        };
-        AutocompleteBooksRequest: {
-            searchTerm: string;
-            section?: string | null;
-        };
-        AutocompleteNotesRequest: {
-            searchTerm: string;
-            section?: string | null;
-            book?: string | null;
-        };
-        AutocompleteNotesResponse: {
-            notes?: components["schemas"]["AutoCompleteNotesItemResponse"][] | null;
-            books?: string[] | null;
-            tags?: string[] | null;
-        };
-        AutocompleteTagsRequest: {
-            searchTerm: string;
-            section?: string | null;
-        };
-        BookItemResponse: {
-            name: string | null;
-            /** Format: int64 */
-            count: number;
-        };
-        ChangePasswordRequest: {
-            currentPassword: string;
-            newPassword: string;
-            passwordRepeat: string;
-        };
-        CreateNoteRequest: {
-            section: string;
-            book?: string | null;
-        };
-        CreateSectionRequest: {
+        AllNotesSection: {
             name: string;
             displayName: string;
             color: string;
         };
-        DeleteNoteRequest: {
-            /** Format: int64 */
-            id: number;
+        ApplicationDataResponse: {
+            allNotesSection: components["schemas"]["AllNotesSection"];
+            sections: components["schemas"]["SectionsItemResponse"][];
         };
-        DeleteSectionRequest: {
-            /** Format: int64 */
-            id: number;
-        };
-        ErrorResponse: {
-            message?: string | null;
-            showNotification?: boolean;
-            field?: string | null;
-        };
-        GetBooksListRequest: {
-            section?: string | null;
-        };
-        GetNoteCalendarDaysRequest: {
-            /** Format: int32 */
-            month: number;
-            /** Format: int32 */
-            year: number;
-            section?: string | null;
-        };
-        GetNoteRequest: {
-            /** Format: int64 */
-            id: number;
-        };
-        GetTagsListRequest: {
-            section?: string | null;
-        };
-        LoginRequest: {
-            /** Format: email */
-            email: string;
-            password: string;
-        };
-        LoginResponse: {
-            id?: string | null;
-            email?: string | null;
-            token?: string | null;
-        };
-        NoteCalendarDaysResponseItem: {
-            /** Format: int64 */
-            count: number;
-            /** Format: date */
-            date: string;
-        };
-        NoteItemResponse: {
-            /** Format: int64 */
-            id?: number;
-            createdAt?: string | null;
-            updatedAt?: string | null;
-            title?: string | null;
-            section?: string | null;
-            content?: string | null;
-            preview?: string | null;
-            book?: string | null;
-            tags?: string[] | null;
-            sources?: components["schemas"]["NoteSource"][] | null;
-        };
-        NoteResponse: {
-            message?: string | null;
-            showNotification?: boolean;
-            note: components["schemas"]["NoteItemResponse"];
-        };
-        NoteSource: {
-            id?: string | null;
-            link?: string | null;
-            title?: string | null;
-            description?: string | null;
-            image?: string | null;
-            showImage?: boolean;
-        };
-        RemoveNoteSourceRequest: {
-            /** Format: int64 */
-            noteId: number;
-            sourceId: string;
-        };
-        ReorderNoteSourcesRequest: {
-            /** Format: int64 */
-            noteId: number;
-            sourceIds: string[];
-        };
-        ReorderSectionsRequest: {
-            ids: number[];
-        };
-        SearchNotesRequest: {
-            section?: string | null;
-            searchTerm?: string | null;
-            /** Format: int32 */
-            page?: number;
-            book?: string | null;
-            tags?: string[] | null;
-            inRandomOrder?: boolean;
-            withoutBook?: boolean;
-            withoutTags?: boolean;
-            /** Format: date */
-            fromDate?: string | null;
-            /** Format: date */
-            toDate?: string | null;
-        };
-        SearchNotesResponse: {
-            notes?: components["schemas"]["NoteItemResponse"][] | null;
-            /** Format: int32 */
-            total?: number;
-            /** Format: int32 */
-            count?: number;
-            /** Format: int32 */
-            lastPage?: number;
-            canLoadMore?: boolean;
-            /** Format: int32 */
-            page?: number;
-            searchTerm?: string | null;
-            keywords?: string[] | null;
-            foundWholePhrase?: boolean;
-        };
-        SectionItemResponse: {
-            /** Format: int64 */
-            id?: number;
-            name?: string | null;
-            displayName?: string | null;
-            color?: string | null;
-        };
-        SectionsResponse: {
-            message?: string | null;
-            showNotification?: boolean;
-            sections: components["schemas"]["SectionItemResponse"][] | null;
-        };
-        SourceItemResponse: {
-            id?: string | null;
-            link?: string | null;
-            title?: string | null;
-            description?: string | null;
-            image?: string | null;
-            showImage?: boolean;
-        };
-        SourcesResponse: {
-            message?: string | null;
-            showNotification?: boolean;
-            sources: components["schemas"]["SourceItemResponse"][] | null;
-        };
-        SuccessResponse: {
-            message?: string | null;
-            showNotification?: boolean;
-        };
-        TagItemResponse: {
-            name: string | null;
+        ItemNameCountResponse: {
+            name: string;
             /** Format: int64 */
             count: number;
         };
-        UpdateNoteBookRequest: {
-            /** Format: int64 */
-            id: number;
-            book: string;
+        NotesAutocompleteResponse: {
+            notes: components["schemas"]["NotesAutocompleteResultItem"][];
+            books: string[];
+            tags: string[];
         };
-        UpdateNoteRequest: {
+        NotesAutocompleteResultItem: {
             /** Format: int64 */
             id: number;
             title: string;
-            content: string;
         };
-        UpdateNoteSectionRequest: {
+        NotesCalendarDaysResponseItem: {
+            /** Format: int64 */
+            count: number;
+            date: string;
+        };
+        NotesCreateRequest: {
+            section: string;
+            book?: string | null;
+        };
+        NotesItemResponse: {
             /** Format: int64 */
             id: number;
+            createdAt: string;
+            updatedAt: string;
             section: string;
+            title?: string | null;
+            content?: string | null;
+            preview?: string | null;
+            book?: string | null;
+            tags?: string[];
+            sources?: components["schemas"]["NotesSource"][];
         };
-        UpdateNoteSourceRequest: {
-            /** Format: int64 */
-            noteId: number;
-            sourceId: string;
+        NotesPatchRequest: {
+            section?: string | null;
+            book?: string | null;
+            tags?: string[] | null;
+            title?: string | null;
+            content?: string | null;
+        };
+        NotesSource: {
+            id: string;
+            link: string;
+            title?: string | null;
+            description?: string | null;
+            image?: string | null;
+            showImage?: boolean;
+        };
+        NotesSourceCreateRequest: {
+            /** Format: uri */
+            link: string;
+        };
+        NotesSourcesReorderRequest: {
+            sourceIds: string[];
+        };
+        NotesSourceUpdateRequest: {
             /** Format: uri */
             link: string;
             title?: string | null;
@@ -1594,20 +1177,77 @@ export interface components {
             image?: string | null;
             showImage?: boolean;
         };
-        UpdateNoteTagsRequest: {
+        PaginatedResponseOfNotesItemResponse: {
             /** Format: int64 */
-            id: number;
-            tags: string[];
+            total: number;
+            /** Format: int64 */
+            count: number;
+            /** Format: int32 */
+            lastPage: number;
+            canLoadMore: boolean;
+            /** Format: int32 */
+            page: number;
+            searchTerm?: string | null;
+            keywords?: string[];
+            foundWholePhrase?: boolean;
+            data: components["schemas"]["NotesItemResponse"][];
         };
-        UpdateSectionRequest: {
-            /** Format: int64 */
-            id: number;
+        ProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
+        };
+        SectionsCreateRequest: {
+            name: string;
             displayName: string;
             color: string;
         };
-        UserResponse: {
-            id?: string | null;
-            email?: string | null;
+        SectionsItemResponse: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+            displayName: string;
+            color: string;
+        };
+        SectionsReorderRequest: {
+            ids: number[];
+        };
+        SectionsUpdateRequest: {
+            displayName: string;
+            color: string;
+        };
+        UsersChangePasswordRequest: {
+            currentPassword: string;
+            newPassword: string;
+            passwordRepeat: string;
+        };
+        UsersCurrentUserResponse: {
+            id: string;
+            email: string;
+        };
+        UsersLoginRequest: {
+            email: string;
+            password: string;
+        };
+        UsersLoginResponse: {
+            /** Format: int64 */
+            id: number;
+            email: string;
+            accessToken?: string | null;
+        };
+        ValidationProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
+            errors?: {
+                [key: string]: string[];
+            };
         };
     };
     responses: never;

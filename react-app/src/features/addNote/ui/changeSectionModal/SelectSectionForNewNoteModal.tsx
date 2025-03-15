@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from '@mantine/form'
 import { notesApi } from '@/entities/note'
 import useFetch from '@/shared/lib/useFetch'
 import useAppSelector from '@/shared/lib/useAppSelector'
@@ -11,28 +11,28 @@ import useCurrentColor from '@/shared/lib/useCurrentColor'
 
 import { Select, Fieldset, Group, Button } from '@mantine/core'
 
-type Inputs = {
-  section: string
-}
-
 function SelectSectionForNewNoteModal() {
   const { request, isLoading } = useFetch(notesApi.createNote)
   const color = useCurrentColor()
   const sections = useAppSelector((state) => state.sections.list)
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<Inputs>({})
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      section: '',
+    },
+    validate: {
+      section: (value) => (!value ? 'Section is required' : null),
+    },
+  })
 
   return (
     <form
-      onSubmit={handleSubmit((formData) => {
+      onSubmit={form.onSubmit((values) => {
         const book = store.getState().notes.filters.book
         request(
           {
-            section: formData.section,
+            section: values.section,
             ...(book && {
               book: book,
             }),
@@ -41,8 +41,8 @@ function SelectSectionForNewNoteModal() {
             if (data) {
               closeSelectSectionForNewNoteModal()
               dispatchCustomEvent(events.notesList.search)
-              if (data.note.id) {
-                openNoteModal({ id: data.note.id, tab: 'edit' })
+              if (data.id) {
+                openNoteModal({ id: data.id, tab: 'edit' })
               }
             }
           },
@@ -53,21 +53,12 @@ function SelectSectionForNewNoteModal() {
         disabled={isLoading}
         variant="unstyled"
       >
-        <Controller
-          name="section"
-          control={control}
-          rules={{
-            required: 'Section is required',
-          }}
-          render={({ field }) => (
-            <Select
-              withAsterisk
-              label="Section"
-              {...field}
-              data={sections.map((o) => ({ value: o.name, label: o.displayName }))}
-              error={errors.section && errors.section.message}
-            />
-          )}
+        <Select
+          withAsterisk
+          label="Section"
+          data={sections.map((o) => ({ value: o.name, label: o.displayName }))}
+          key={form.key('section')}
+          {...form.getInputProps('section')}
         />
         <Group
           justify="flex-end"
