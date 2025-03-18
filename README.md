@@ -19,6 +19,7 @@ Note-taking application made with:
 ## Table of Contents
 
 - [Features](#features)
+- [App Demo](#app-demo)
 - [Installation](#installation)
 - [License](#license)
 
@@ -32,6 +33,10 @@ Note-taking application made with:
 - Application state is synchronized with the URL.
 - REST API with OpenApi documentation.
 - User authentication with JWT tokens.
+
+## App Demo
+
+![App Demo](demo.gif)
 
 ## Installation
 
