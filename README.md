@@ -14,7 +14,7 @@ Note-taking application made with:
 - [SQLite](https://sqlite.org/)
 - [OpenAPI TypeScript](https://openapi-ts.dev/)
 - [Playwright](https://playwright.dev/)
-- [Feature-Sliced Design (FSD)](https://feature-sliced.design/)
+- [Feature-Sliced Design (FSD)](https://feature-sliced.github.io/documentation/)
 
 ## Table of Contents
 
