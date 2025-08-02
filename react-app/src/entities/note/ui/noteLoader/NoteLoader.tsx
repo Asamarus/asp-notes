@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
-import { notesApi } from '../..'
+import { notesApi, setNote } from '@/entities/note'
 import createFetch from '@/shared/lib/createFetch'
 import store from '@/shared/lib/store'
 import useAppSelector from '@/shared/lib/useAppSelector'
-import { setNote } from '../..'
 import noop from '@/shared/lib/noop'
 
 import Loading from '@/shared/ui/loading'
@@ -27,6 +26,15 @@ function NoteLoader({ id, children }: NoteLoaderProps) {
           store.dispatch(setNote({ id: data.id, note: data }))
         }
       })
+      setTimeout(() => {
+        if (store.getState().notes.collection[id]?.createdAt === undefined) {
+          getNoteRequest(id, ({ data }) => {
+            if (data) {
+              store.dispatch(setNote({ id: data.id, note: data }))
+            }
+          })
+        }
+      }, 5000)
     }
   }, [id])
 
