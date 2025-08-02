@@ -161,6 +161,7 @@ const editorConfig: EditorConfig = {
       { language: 'jsx', label: '.jsx' },
       { language: 'typescript', label: 'TypeScript' },
       { language: 'javascript', label: 'JavaScript' },
+      { language: 'go', label: 'GO' },
       { language: 'css', label: 'CSS' },
       { language: 'html', label: 'HTML' },
       { language: 'xml', label: 'XML' },
